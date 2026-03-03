@@ -3,180 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Investiční Vizionář</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Zvířecí Poznávačka</title>
     <style>
         :root {
-            --primary: #10b981; /* Investiční zelená */
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #f8fafc;
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --primary: #4a90e2;
+            --text: #333;
         }
 
         body {
             margin: 0; font-family: -apple-system, sans-serif;
             background: var(--bg); color: var(--text);
             display: flex; flex-direction: column; height: 100vh;
+            align-items: center; justify-content: center;
         }
 
-        header {
-            padding: 40px 20px 20px; background: var(--card);
-            text-align: center; font-size: 1.2rem; font-weight: bold;
-            border-bottom: 1px solid #334155;
+        .app-container {
+            width: 90%; max-width: 400px; text-align: center;
         }
-
-        main { flex: 1; overflow-y: auto; padding: 15px; }
 
         .card {
-            background: var(--card); border-radius: 16px; padding: 18px;
-            margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            background: var(--card); border-radius: 25px;
+            padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-bottom: 20px; min-height: 400px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
-
-        input {
-            width: 100%; background: #334155; border: 1px solid #475569;
-            color: white; padding: 12px; border-radius: 8px;
-            font-size: 1rem; margin-bottom: 15px; box-sizing: border-box;
+        .animal-img {
+            width: 100%; height: 250px; object-fit: cover;
+            border-radius: 15px; margin-bottom: 20px;
+            background: #eee;
         }
 
-        .result-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-            margin-top: 10px;
+        #answer {
+            font-size: 1.8rem; font-weight: bold; color: var(--primary);
+            margin: 10px 0; min-height: 2.2rem; visibility: hidden;
         }
 
-        .result-box {
-            background: rgba(16, 185, 129, 0.1);
-            padding: 10px; border-radius: 10px; border: 1px solid var(--primary);
+        .btn {
+            width: 100%; padding: 15px; border: none; border-radius: 12px;
+            font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s; margin-bottom: 10px;
         }
 
-        .result-val { display: block; font-size: 1.1rem; font-weight: bold; color: var(--primary); }
-        .result-lbl { font-size: 0.7rem; color: #94a3b8; }
+        .btn-reveal { background: var(--primary); color: white; }
+        .btn-next { background: #34c759; color: white; display: none; }
+        
+        .btn:active { transform: scale(0.98); }
 
-        canvas { margin-top: 20px; }
+        .progress { font-size: 0.8rem; color: #888; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<header>Investiční Simulátor</header>
-
-<main>
+<div class="app-container">
     <div class="card">
-        <label>Počáteční vklad (Kč)</label>
-        <input type="number" id="initial" value="100000" oninput="calculate()">
-
-        <label>Měsíční úložka (Kč)</label>
-        <input type="number" id="monthly" value="5000" oninput="calculate()">
-
-        <label>Roční zhodnocení (%)</label>
-        <input type="number" id="rate" value="7" oninput="calculate()">
-
-        <label>Doba investice (let)</label>
-        <input type="number" id="years" value="20" oninput="calculate()">
-
-        <label>Roční navyšování vkladu o (%) — <i>Step-up</i></label>
-        <input type="number" id="stepup" value="3" oninput="calculate()">
-
-        <label>Očekávaná inflace (%)</label>
-        <input type="number" id="inflation" value="2" oninput="calculate()">
+        <img id="animal-image" class="animal-img" src="" alt="Zvíře">
+        <div id="answer">???</div>
+        <button id="reveal-btn" class="btn btn-reveal" onclick="reveal()">UKÁZAT NÁZEV</button>
+        <button id="next-btn" class="btn btn-next" onclick="nextQuestion()">DALŠÍ ZVÍŘE ➔</button>
+        <div class="progress" id="progress">Načítám...</div>
     </div>
-
-    <div class="card">
-        <h3>Výsledek simulace</h3>
-        <div class="result-grid">
-            <div class="result-box">
-                <span class="result-lbl">Nominální hodnota</span>
-                <span class="result-val" id="resTotal">0 Kč</span>
-            </div>
-            <div class="result-box">
-                <span class="result-lbl">Dnešní kupní síla</span>
-                <span class="result-val" id="resReal">0 Kč</span>
-            </div>
-            <div class="result-box">
-                <span class="result-lbl">Celkem vloženo</span>
-                <span class="result-val" id="resInvested">0 Kč</span>
-            </div>
-            <div class="result-box">
-                <span class="result-lbl">Čistý zisk (po 15% dani)</span>
-                <span class="result-val" id="resProfit">0 Kč</span>
-            </div>
-        </div>
-        <canvas id="chart"></canvas>
-    </div>
-</main>
+</div>
 
 <script>
-    let chart;
+    // Seznam zvířat (můžeš si sem přidat další)
+    const quizData = [
+        { name: "Lev", img: "http://googleusercontent.com/image_collection/image_retrieval/2641472515327824393_0" },
+        { name: "Slon", img: "http://googleusercontent.com/image_collection/image_retrieval/4801493615197016726_0" },
+        { name: "Žirafa", img: "http://googleusercontent.com/image_collection/image_retrieval/14990773705399737238_0" },
+        { name: "Tučňák", img: "http://googleusercontent.com/image_collection/image_retrieval/106045820223358885_0" }
+    ];
 
-    function calculate() {
-        let initial = parseFloat(document.getElementById('initial').value) || 0;
-        let monthly = parseFloat(document.getElementById('monthly').value) || 0;
-        let rate = (parseFloat(document.getElementById('rate').value) || 0) / 100 / 12;
-        let years = parseInt(document.getElementById('years').value) || 0;
-        let stepup = (parseFloat(document.getElementById('stepup').value) || 0) / 100;
-        let inflation = (parseFloat(document.getElementById('inflation').value) || 0) / 100;
+    let currentIndex = 0;
 
-        let total = initial;
-        let totalInvested = initial;
-        let history = [initial];
-        let labels = [0];
-
-        let currentMonthly = monthly;
-
-        for (let y = 1; y <= years; y++) {
-            for (let m = 1; m <= 12; m++) {
-                total = (total + currentMonthly) * (1 + rate);
-                totalInvested += currentMonthly;
-            }
-            // Roční navýšení měsíčního vkladu (Step-up)
-            currentMonthly *= (1 + stepup);
-            history.push(Math.round(total));
-            labels.push(y);
-        }
-
-        // Výpočet inflace (reálná hodnota peněz)
-        let realValue = total / Math.pow(1 + inflation, years);
-        let profit = total - totalInvested;
-        let taxedProfit = profit > 0 ? profit * 0.85 : profit; // 15% daň ze zisku
-
-        // Formátování čísel
-        const fmt = (val) => new Intl.NumberFormat('cs-CZ').format(Math.round(val)) + " Kč";
-
-        document.getElementById('resTotal').innerText = fmt(total);
-        document.getElementById('resReal').innerText = fmt(realValue);
-        document.getElementById('resInvested').innerText = fmt(totalInvested);
-        document.getElementById('resProfit').innerText = fmt(taxedProfit);
-
-        updateChart(labels, history);
+    function updateCard() {
+        const animal = quizData[currentIndex];
+        document.getElementById('animal-image').src = animal.img;
+        document.getElementById('answer').innerText = animal.name;
+        document.getElementById('answer').style.visibility = 'hidden';
+        document.getElementById('reveal-btn').style.display = 'block';
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('progress').innerText = `Zvíře ${currentIndex + 1} z ${quizData.length}`;
     }
 
-    function updateChart(labels, data) {
-        if (chart) chart.destroy();
-        const ctx = document.getElementById('chart').getContext('2d');
-        chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Vývoj portfolia',
-                    data: data,
-                    borderColor: '#10b981',
-                    tension: 0.3,
-                    fill: true,
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)'
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: { 
-                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                    x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
-                }
-            }
-        });
+    function reveal() {
+        document.getElementById('answer').style.visibility = 'visible';
+        document.getElementById('reveal-btn').style.display = 'none';
+        document.getElementById('next-btn').style.display = 'block';
+        if (navigator.vibrate) navigator.vibrate(50);
     }
 
-    calculate();
+    function nextQuestion() {
+        currentIndex = (currentIndex + 1) % quizData.length;
+        updateCard();
+    }
+
+    // Inicializace první karty
+    updateCard();
 </script>
+
 </body>
 </html>
