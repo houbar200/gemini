@@ -3,142 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Moje Super Appka</title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#007AFF">
-
+    <title>Investiční Vizionář</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Základní reset a styl pro mobil */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
+        :root {
+            --primary: #10b981; /* Investiční zelená */
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+        }
+
         body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            user-select: none; /* Zakáže označování textu, působí to víc jako appka */
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            margin: 0; font-family: -apple-system, sans-serif;
+            background: var(--bg); color: var(--text);
+            display: flex; flex-direction: column; height: 100vh;
         }
 
-        /* Horní lišta (Header) */
         header {
-            background-color: #007AFF;
-            color: white;
-            padding: 50px 20px 15px; /* Vyšší padding nahoře kvůli výřezu mobilu */
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 40px 20px 20px; background: var(--card);
+            text-align: center; font-size: 1.2rem; font-weight: bold;
+            border-bottom: 1px solid #334155;
         }
 
-        /* Hlavní obsah (Scrollable area) */
-        main {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
+        main { flex: 1; overflow-y: auto; padding: 15px; }
 
         .card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            background: var(--card); border-radius: 16px; padding: 18px;
+            margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
-        button {
-            width: 100%;
-            background-color: #007AFF;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.1s;
+        label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
+
+        input {
+            width: 100%; background: #334155; border: 1px solid #475569;
+            color: white; padding: 12px; border-radius: 8px;
+            font-size: 1rem; margin-bottom: 15px; box-sizing: border-box;
         }
 
-        button:active {
-            transform: scale(0.98);
-            background-color: #0056b3;
+        .result-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+            margin-top: 10px;
         }
 
-        /* Spodní navigace (Tab Bar) */
-        footer {
-            height: 80px;
-            background: white;
-            border-top: 1px solid #ddd;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-bottom: 15px; /* Místo pro spodní ovládací čáru mobilu */
+        .result-box {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 10px; border-radius: 10px; border: 1px solid var(--primary);
         }
 
-        .nav-item {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #888;
-        }
+        .result-val { display: block; font-size: 1.1rem; font-weight: bold; color: var(--primary); }
+        .result-lbl { font-size: 0.7rem; color: #94a3b8; }
 
-        .nav-item.active {
-            color: #007AFF;
-        }
-
-        .icon { font-size: 1.5rem; display: block; }
+        canvas { margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <header id="app-title">Moje Appka</header>
+<header>Investiční Simulátor</header>
 
-    <main>
-        <div class="card">
-            <h2>Vítej! 👋</h2>
-            <p>Takhle vypadá moderní mobilní rozhraní vytvořené v HTML.</p>
-        </div>
+<main>
+    <div class="card">
+        <label>Počáteční vklad (Kč)</label>
+        <input type="number" id="initial" value="100000" oninput="calculate()">
 
-        <div class="card">
-            <h3>Interaktivní test</h3>
-            <p>Počet kliknutí: <strong id="counter">0</strong></p>
-            <button onclick="increment()">Přidat bod</button>
-        </div>
+        <label>Měsíční úložka (Kč)</label>
+        <input type="number" id="monthly" value="5000" oninput="calculate()">
 
-        <div class="card">
-            <h3>Co dál?</h3>
-            <p>Můžeme přidat foťák, mapy nebo ukládání dat do paměti mobilu.</p>
-        </div>
-    </main>
+        <label>Roční zhodnocení (%)</label>
+        <input type="number" id="rate" value="7" oninput="calculate()">
 
-    <footer>
-        <div class="nav-item active">
-            <span class="icon">🏠</span> Domů
-        </div>
-        <div class="nav-item" onclick="alert('Sekce Úkoly')">
-            <span class="icon">✅</span> Úkoly
-        </div>
-        <div class="nav-item" onclick="alert('Nastavení')">
-            <span class="icon">⚙️</span> Nastavení
-        </div>
-    </footer>
+        <label>Doba investice (let)</label>
+        <input type="number" id="years" value="20" oninput="calculate()">
 
-    <script>
-        // Jednoduchá funkce pro počítadlo
-        let count = 0;
-        function increment() {
-            count++;
-            document.getElementById('counter').innerText = count;
-            
-            // Malá vibrace (pokud to mobil podporuje)
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
+        <label>Roční navyšování vkladu o (%) — <i>Step-up</i></label>
+        <input type="number" id="stepup" value="3" oninput="calculate()">
+
+        <label>Očekávaná inflace (%)</label>
+        <input type="number" id="inflation" value="2" oninput="calculate()">
+    </div>
+
+    <div class="card">
+        <h3>Výsledek simulace</h3>
+        <div class="result-grid">
+            <div class="result-box">
+                <span class="result-lbl">Nominální hodnota</span>
+                <span class="result-val" id="resTotal">0 Kč</span>
+            </div>
+            <div class="result-box">
+                <span class="result-lbl">Dnešní kupní síla</span>
+                <span class="result-val" id="resReal">0 Kč</span>
+            </div>
+            <div class="result-box">
+                <span class="result-lbl">Celkem vloženo</span>
+                <span class="result-val" id="resInvested">0 Kč</span>
+            </div>
+            <div class="result-box">
+                <span class="result-lbl">Čistý zisk (po 15% dani)</span>
+                <span class="result-val" id="resProfit">0 Kč</span>
+            </div>
+        </div>
+        <canvas id="chart"></canvas>
+    </div>
+</main>
+
+<script>
+    let chart;
+
+    function calculate() {
+        let initial = parseFloat(document.getElementById('initial').value) || 0;
+        let monthly = parseFloat(document.getElementById('monthly').value) || 0;
+        let rate = (parseFloat(document.getElementById('rate').value) || 0) / 100 / 12;
+        let years = parseInt(document.getElementById('years').value) || 0;
+        let stepup = (parseFloat(document.getElementById('stepup').value) || 0) / 100;
+        let inflation = (parseFloat(document.getElementById('inflation').value) || 0) / 100;
+
+        let total = initial;
+        let totalInvested = initial;
+        let history = [initial];
+        let labels = [0];
+
+        let currentMonthly = monthly;
+
+        for (let y = 1; y <= years; y++) {
+            for (let m = 1; m <= 12; m++) {
+                total = (total + currentMonthly) * (1 + rate);
+                totalInvested += currentMonthly;
             }
+            // Roční navýšení měsíčního vkladu (Step-up)
+            currentMonthly *= (1 + stepup);
+            history.push(Math.round(total));
+            labels.push(y);
         }
-    </script>
+
+        // Výpočet inflace (reálná hodnota peněz)
+        let realValue = total / Math.pow(1 + inflation, years);
+        let profit = total - totalInvested;
+        let taxedProfit = profit > 0 ? profit * 0.85 : profit; // 15% daň ze zisku
+
+        // Formátování čísel
+        const fmt = (val) => new Intl.NumberFormat('cs-CZ').format(Math.round(val)) + " Kč";
+
+        document.getElementById('resTotal').innerText = fmt(total);
+        document.getElementById('resReal').innerText = fmt(realValue);
+        document.getElementById('resInvested').innerText = fmt(totalInvested);
+        document.getElementById('resProfit').innerText = fmt(taxedProfit);
+
+        updateChart(labels, history);
+    }
+
+    function updateChart(labels, data) {
+        if (chart) chart.destroy();
+        const ctx = document.getElementById('chart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Vývoj portfolia',
+                    data: data,
+                    borderColor: '#10b981',
+                    tension: 0.3,
+                    fill: true,
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)'
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
+                    x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    calculate();
+</script>
 </body>
 </html>
