@@ -7,147 +7,718 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#080d14">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --primary: #10b981;
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
+            --bg:        #080d14;
+            --surface:   #0f1923;
+            --card:      #131f2e;
+            --border:    rgba(255,255,255,0.07);
+            --primary:   #4ade80;
+            --primary2:  #22c55e;
+            --gold:      #f5c842;
+            --text:      #f0f4f8;
+            --text-dim:  #64748b;
+            --text-mid:  #94a3b8;
+            --radius:    28px;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            margin: 0; font-family: -apple-system, system-ui, sans-serif;
-            background: var(--bg); color: var(--text);
-            display: flex; flex-direction: column; height: 100vh;
-            align-items: center; justify-content: center;
-            overflow: hidden; -webkit-user-select: none; user-select: none;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            padding: 16px;
         }
 
-        .app-container { width: 92%; max-width: 450px; text-align: center; }
+        /* ── Subtle background grid ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(74,222,128,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(74,222,128,0.025) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Glowing orb ── */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -20vh; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(74,222,128,0.07) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ──────────────── HEADER ──────────────── */
+        .header {
+            width: 100%; max-width: 440px;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 14px;
+            position: relative; z-index: 1;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: var(--text-mid);
+            letter-spacing: 0.5px;
+        }
+        .logo span { color: var(--primary); }
+
+        .progress-pill {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-mid);
+            letter-spacing: 0.5px;
+        }
+
+        /* ──────────────── PROGRESS BAR ──────────────── */
+        .progress-track {
+            width: 100%; max-width: 440px;
+            height: 3px;
+            background: var(--surface);
+            border-radius: 4px;
+            margin-bottom: 14px;
+            overflow: hidden;
+            position: relative; z-index: 1;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary2), var(--primary));
+            border-radius: 4px;
+            transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 0 8px rgba(74,222,128,0.5);
+        }
+
+        /* ──────────────── CARD ──────────────── */
+        .card-wrap {
+            width: 100%; max-width: 440px;
+            position: relative; z-index: 1;
+            perspective: 1000px;
+        }
 
         .card {
-            background: var(--card); border-radius: 32px;
-            padding: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
-            min-height: 480px; display: flex; flex-direction: column;
-            align-items: center; border: 1px solid #334155;
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow:
+                0 0 0 1px rgba(74,222,128,0.04),
+                0 32px 64px -16px rgba(0,0,0,0.8),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Image area */
+        .img-wrap {
             position: relative;
+            width: 100%;
+            height: 270px;
+            overflow: hidden;
+            background: var(--surface);
         }
 
         .animal-img {
-            width: 100%; height: 280px; object-fit: cover;
-            border-radius: 22px; margin-bottom: 15px;
-            background: #0f172a; border: 1px solid #334155;
-            transition: opacity 0.3s ease-in-out;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            display: block;
+        }
+        .animal-img.loading { opacity: 0; transform: scale(1.03); }
+
+        /* Gradient overlay on image */
+        .img-wrap::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent 55%, var(--card) 100%);
+            pointer-events: none;
         }
 
-        #answer {
-            font-size: 1.4rem; font-weight: 800; color: var(--primary);
-            margin: 10px 0; min-height: 5rem; visibility: hidden;
-            display: flex; align-items: center; justify-content: center;
-            line-height: 1.2; text-transform: uppercase;
+        /* Category badge */
+        .badge {
+            position: absolute;
+            top: 14px; left: 14px;
+            background: rgba(8,13,20,0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 5px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-mid);
+            letter-spacing: 0.5px;
+            z-index: 2;
+            display: flex; align-items: center; gap: 5px;
         }
+
+        /* card body */
+        .card-body {
+            padding: 16px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Answer area */
+        .answer-wrap {
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-hidden {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .answer-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            line-height: 1.2;
+            animation: fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) both;
+            display: none;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Buttons */
+        .btn-row { display: flex; gap: 10px; }
 
         .btn {
-            width: 100%; padding: 18px; border: none; border-radius: 20px;
-            font-size: 1.1rem; font-weight: bold; cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            text-transform: uppercase; letter-spacing: 1px;
+            flex: 1; padding: 16px 10px;
+            border: none; border-radius: 18px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+            letter-spacing: 0.3px;
+            position: relative; overflow: hidden;
         }
 
-        .btn-reveal { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
-        .btn-next { background: var(--primary); color: #0f172a; display: none; }
-        .btn:active { transform: scale(0.95); opacity: 0.9; }
+        .btn::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: rgba(255,255,255,0);
+            transition: background 0.15s;
+        }
+        .btn:active::after { background: rgba(255,255,255,0.08); }
+        .btn:active { transform: scale(0.97); }
 
-        .progress { font-size: 0.85rem; color: var(--text-dim); margin-top: 15px; font-weight: 600; }
+        .btn-reveal {
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid rgba(74,222,128,0.35);
+            box-shadow: inset 0 0 20px rgba(74,222,128,0.04);
+        }
+        .btn-reveal:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(74,222,128,0.15), inset 0 0 20px rgba(74,222,128,0.06);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, var(--primary2), var(--primary));
+            color: #071a0f;
+            box-shadow: 0 4px 24px rgba(74,222,128,0.25);
+            display: none;
+        }
+        .btn-next:hover {
+            box-shadow: 0 4px 32px rgba(74,222,128,0.4);
+        }
+
+        /* swipe hint */
+        .swipe-hint {
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            opacity: 0.7;
+        }
+
+        /* ──────────────── FINISH SCREEN ──────────────── */
+        .finish-screen {
+            display: none;
+            position: fixed; inset: 0;
+            background: var(--bg);
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        .finish-screen.visible { display: flex; }
+
+        /* Animated ring */
+        .finish-ring {
+            width: 120px; height: 120px;
+            position: relative;
+            margin-bottom: 32px;
+        }
+        .finish-ring svg {
+            width: 120px; height: 120px;
+            transform: rotate(-90deg);
+        }
+        .finish-ring circle {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+        .ring-bg { stroke: rgba(255,255,255,0.05); }
+        .ring-fill {
+            stroke: var(--primary);
+            stroke-dasharray: 326;
+            stroke-dashoffset: 326;
+            filter: drop-shadow(0 0 6px rgba(74,222,128,0.5));
+            transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.3s;
+        }
+        .finish-ring .icon {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.8rem;
+        }
+
+        .finish-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 40%, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .finish-sub {
+            font-size: 1rem;
+            color: var(--text-mid);
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .finish-stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .btn-restart {
+            width: 100%; max-width: 320px;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary2), var(--primary));
+            border: none;
+            border-radius: 20px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #071a0f;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 32px rgba(74,222,128,0.3);
+            transition: all 0.18s;
+        }
+        .btn-restart:active { transform: scale(0.97); }
+
+        /* ──────────────── CARD FLIP ANIMATION ──────────────── */
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(18px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .card-wrap { animation: cardIn 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+
+        /* ──────────────── CONFETTI CANVAS ──────────────── */
+        #confetti-canvas {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 99;
+        }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<!-- Confetti -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Header -->
+<div class="header">
+    <div class="logo">Atlas <span>Plemen</span></div>
+    <div class="progress-pill" id="progress-pill">— / —</div>
+</div>
+
+<!-- Progress bar -->
+<div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+</div>
+
+<!-- Card -->
+<div class="card-wrap">
     <div class="card">
-        <img id="animal-image" class="animal-img" src="" alt="Načítám...">
-        <div id="answer">???</div>
-        <button id="reveal-btn" class="btn btn-reveal" onclick="reveal()">Kdo jsem?</button>
-        <button id="next-btn" class="btn btn-next" onclick="nextQuestion()">Další karta ➔</button>
-        <div class="progress" id="progress">Míchám 44 karet...</div>
+        <div class="img-wrap">
+            <div class="badge" id="badge">🐄 Skot</div>
+            <img id="animal-image" class="animal-img loading" src="" alt="">
+        </div>
+        <div class="card-body">
+            <div class="answer-wrap">
+                <div class="answer-hidden" id="dots-wrap"></div>
+                <div class="answer-text" id="answer-text"></div>
+            </div>
+            <div class="btn-row">
+                <button id="reveal-btn" class="btn btn-reveal" onclick="reveal()">👁 Odhalit</button>
+                <button id="next-btn" class="btn btn-next" onclick="nextQuestion()">Další ➔</button>
+            </div>
+            <div class="swipe-hint">Swipe vlevo pro další kartu</div>
+        </div>
     </div>
 </div>
 
+<!-- Finish screen -->
+<div class="finish-screen" id="finish-screen">
+    <div class="finish-ring">
+        <svg viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52"/>
+            <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52"/>
+        </svg>
+        <div class="icon">🏆</div>
+    </div>
+    <div class="finish-title">Výborně!<br>Dokončeno.</div>
+    <div class="finish-sub">Prošel jsi všechna plemena<br>v tomto balíčku.</div>
+    <div class="finish-stats">
+        <div class="stat-box">
+            <div class="stat-num" id="stat-total">44</div>
+            <div class="stat-label">Karet</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num" id="stat-rounds">1</div>
+            <div class="stat-label">Kolo</div>
+        </div>
+    </div>
+    <button class="btn-restart" onclick="restart()">🔄 Zamíchat znovu</button>
+</div>
+
 <script>
-    // KOMPLETNÍ SEZNAM VŠECH 44 SOUBORŮ
-    const seznamSouboru = [
-        "Aberdeen Angus.jpg", "Awassi.JPG", "Belgické Modré.jpg", "Česká Červinka.png",
-        "České bílé ušlechtilé.jpg", "Český Strakatý Skot.jpg", "Duroc.jpg", "Galloway.jpg",
-        "Gasconne.png", "Hampshire.jpg", "Highland.jpg", "Holštýn.jpg", "Jersey.jpg",
-        "Landrace.jpg", "Mangalica.jpg", "Oxford Down.jpg", "Piemontese.jpg", "Pietrain.jpg",
-        "Přeštické černostrakaté.jpg", "Suffolk.jpg", "Arabský plnokrevník.jpg", "Brahmánka.jpg",
-        "Českomoravský belgický kůň.jpg", "Český strakáč.jpg", "Hafling.webp", "Hedvábnička.jpg",
-        "Hucul.jpg", "Indický běžec.jpg", "Koza anglonúbijská.jpg", "Koza Bílá Krátkosrtá.webp",
-        "Koza hnědá krátkosrstá.webp", "Koza kašmírová.jpg", "Kůň Andaluský.jpg", 
-        "Kůň starokladrubský.jpg", "Lipicán.webp", "Merinolandschaf.jpg", 
-        "Moravský bílý hnědooký.jpg", "Ovce Jákobova.jpg", "Ovce Romanovská.webp", 
-        "Slezský norik.jpg", "Percheron.webp", "Shetlandský pony.webp", "Texel.jpg", "Valaška.jpg"
-    ];
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const seznamSouboru = [
+    { file: "Aberdeen Angus.jpg",              cat: "🐄", catName: "Skot" },
+    { file: "Belgické Modré.jpg",              cat: "🐄", catName: "Skot" },
+    { file: "Česká Červinka.png",              cat: "🐄", catName: "Skot" },
+    { file: "Český Strakatý Skot.jpg",         cat: "🐄", catName: "Skot" },
+    { file: "Galloway.jpg",                    cat: "🐄", catName: "Skot" },
+    { file: "Highland.jpg",                    cat: "🐄", catName: "Skot" },
+    { file: "Holštýn.jpg",                     cat: "🐄", catName: "Skot" },
+    { file: "Jersey.jpg",                      cat: "🐄", catName: "Skot" },
+    { file: "Piemontese.jpg",                  cat: "🐄", catName: "Skot" },
+    { file: "Brahmánka.jpg",                   cat: "🐄", catName: "Skot" },
+    { file: "Gasconne.png",                    cat: "🐄", catName: "Skot" },
+    { file: "Duroc.jpg",                       cat: "🐷", catName: "Prasata" },
+    { file: "Hampshire.jpg",                   cat: "🐷", catName: "Prasata" },
+    { file: "Landrace.jpg",                    cat: "🐷", catName: "Prasata" },
+    { file: "Mangalica.jpg",                   cat: "🐷", catName: "Prasata" },
+    { file: "Pietrain.jpg",                    cat: "🐷", catName: "Prasata" },
+    { file: "Přeštické černostrakaté.jpg",     cat: "🐷", catName: "Prasata" },
+    { file: "České bílé ušlechtilé.jpg",       cat: "🐷", catName: "Prasata" },
+    { file: "Moravský bílý hnědooký.jpg",      cat: "🐷", catName: "Prasata" },
+    { file: "Arabský plnokrevník.jpg",         cat: "🐴", catName: "Koně" },
+    { file: "Českomoravský belgický kůň.jpg",  cat: "🐴", catName: "Koně" },
+    { file: "Hafling.webp",                    cat: "🐴", catName: "Koně" },
+    { file: "Hucul.jpg",                       cat: "🐴", catName: "Koně" },
+    { file: "Kůň Andaluský.jpg",               cat: "🐴", catName: "Koně" },
+    { file: "Kůň starokladrubský.jpg",         cat: "🐴", catName: "Koně" },
+    { file: "Lipicán.webp",                    cat: "🐴", catName: "Koně" },
+    { file: "Percheron.webp",                  cat: "🐴", catName: "Koně" },
+    { file: "Shetlandský pony.webp",           cat: "🐴", catName: "Koně" },
+    { file: "Slezský norik.jpg",               cat: "🐴", catName: "Koně" },
+    { file: "Awassi.JPG",                      cat: "🐑", catName: "Ovce" },
+    { file: "Merinolandschaf.jpg",             cat: "🐑", catName: "Ovce" },
+    { file: "Oxford Down.jpg",                 cat: "🐑", catName: "Ovce" },
+    { file: "Ovce Jákobova.jpg",               cat: "🐑", catName: "Ovce" },
+    { file: "Ovce Romanovská.webp",            cat: "🐑", catName: "Ovce" },
+    { file: "Suffolk.jpg",                     cat: "🐑", catName: "Ovce" },
+    { file: "Texel.jpg",                       cat: "🐑", catName: "Ovce" },
+    { file: "Valaška.jpg",                     cat: "🐑", catName: "Ovce" },
+    { file: "Hedvábnička.jpg",                 cat: "🐑", catName: "Ovce" },
+    { file: "Český strakáč.jpg",               cat: "🐑", catName: "Ovce" },
+    { file: "Koza anglonúbijská.jpg",          cat: "🐐", catName: "Kozy" },
+    { file: "Koza Bílá Krátkosrtá.webp",       cat: "🐐", catName: "Kozy" },
+    { file: "Koza hnědá krátkosrstá.webp",     cat: "🐐", catName: "Kozy" },
+    { file: "Koza kašmírová.jpg",              cat: "🐐", catName: "Kozy" },
+    { file: "Indický běžec.jpg",               cat: "🦆", catName: "Drůbež" },
+];
 
-    let quizData = [];
-    let currentIndex = 0;
+let quizData = [];
+let currentIndex = 0;
+let rounds = 1;
+let revealed = false;
 
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+// touch/swipe
+let touchStartX = 0;
+let touchStartY = 0;
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function getName(file) {
+    return file.substring(0, file.lastIndexOf('.'));
+}
+
+function prepareData() {
+    quizData = seznamSouboru.map(item => ({
+        name: getName(item.file),
+        img: item.file,
+        cat: item.cat,
+        catName: item.catName
+    }));
+    shuffle(quizData);
+}
+
+// ─── RENDER CARD ─────────────────────────────────────────────────────────────
+function updateCard() {
+    const animal = quizData[currentIndex];
+    const imgEl = document.getElementById('animal-image');
+
+    // progress
+    const total = quizData.length;
+    const done = currentIndex;
+    document.getElementById('progress-pill').textContent = `${currentIndex + 1} / ${total}`;
+    document.getElementById('progress-fill').style.width = `${(done / total) * 100}%`;
+
+    // badge
+    document.getElementById('badge').textContent = `${animal.cat} ${animal.catName}`;
+
+    // image fade
+    imgEl.classList.add('loading');
+    const newSrc = animal.img;
+    const tmp = new Image();
+    tmp.onload = () => {
+        imgEl.src = newSrc;
+        imgEl.classList.remove('loading');
+    };
+    tmp.onerror = () => {
+        imgEl.src = newSrc;
+        imgEl.classList.remove('loading');
+    };
+    tmp.src = newSrc;
+
+    // answer
+    document.getElementById('answer-text').style.display = 'none';
+    document.getElementById('answer-text').textContent = animal.name;
+
+    // dots
+    const dotsWrap = document.getElementById('dots-wrap');
+    dotsWrap.style.display = 'flex';
+    dotsWrap.innerHTML = '';
+    const wordCount = animal.name.split(' ').length;
+    const dotCount = Math.min(animal.name.replace(/ /g,'').length, 14);
+    for (let i = 0; i < dotCount; i++) {
+        const d = document.createElement('div');
+        d.className = 'dot';
+        dotsWrap.appendChild(d);
     }
 
-    function prepareData() {
-        quizData = seznamSouboru.map(soubor => {
-            let jmeno = soubor.substring(0, soubor.lastIndexOf('.')); 
-            return { name: jmeno, img: soubor };
-        });
-        shuffle(quizData);
-    }
+    // buttons
+    document.getElementById('reveal-btn').style.display = 'flex';
+    document.getElementById('next-btn').style.display = 'none';
+    revealed = false;
+}
 
-    function updateCard() {
-        const animal = quizData[currentIndex];
-        const imgElement = document.getElementById('animal-image');
-        
-        imgElement.style.opacity = 0;
-        
-        setTimeout(() => {
-            imgElement.src = animal.img;
-            imgElement.style.opacity = 1;
-            document.getElementById('answer').innerText = animal.name;
-            document.getElementById('answer').style.visibility = 'hidden';
-            document.getElementById('reveal-btn').style.display = 'block';
-            document.getElementById('next-btn').style.display = 'none';
-            document.getElementById('progress').innerText = `KARTA ${currentIndex + 1} / ${quizData.length}`;
-        }, 250);
-    }
+// ─── REVEAL ──────────────────────────────────────────────────────────────────
+function reveal() {
+    if (revealed) return;
+    revealed = true;
 
-    function reveal() {
-        document.getElementById('answer').style.visibility = 'visible';
-        document.getElementById('reveal-btn').style.display = 'none';
-        document.getElementById('next-btn').style.display = 'block';
-        if (navigator.vibrate) navigator.vibrate(40);
-    }
+    document.getElementById('dots-wrap').style.display = 'none';
+    const at = document.getElementById('answer-text');
+    at.style.display = 'flex';
 
-    function nextQuestion() {
-        currentIndex++;
-        if (currentIndex >= quizData.length) {
-            alert("Gratuluji! Prošel jsi všech 44 plemen. Zamíchám je znovu.");
-            currentIndex = 0;
-            shuffle(quizData);
-        }
-        updateCard();
-    }
+    document.getElementById('reveal-btn').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'flex';
 
-    prepareData();
+    if (navigator.vibrate) navigator.vibrate(40);
+}
+
+// ─── NEXT ─────────────────────────────────────────────────────────────────────
+function nextQuestion() {
+    currentIndex++;
+    if (currentIndex >= quizData.length) {
+        showFinish();
+        return;
+    }
     updateCard();
-</script>
+}
 
+// ─── FINISH ──────────────────────────────────────────────────────────────────
+function showFinish() {
+    document.getElementById('stat-total').textContent = quizData.length;
+    document.getElementById('stat-rounds').textContent = rounds;
+
+    const fs = document.getElementById('finish-screen');
+    fs.classList.add('visible');
+
+    // Animate ring to 100%
+    setTimeout(() => {
+        document.getElementById('ring-fill').style.strokeDashoffset = '0';
+    }, 100);
+
+    launchConfetti();
+    if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+}
+
+function restart() {
+    rounds++;
+    currentIndex = 0;
+    shuffle(quizData);
+
+    document.getElementById('finish-screen').classList.remove('visible');
+    document.getElementById('ring-fill').style.strokeDashoffset = '326';
+
+    updateCard();
+}
+
+// ─── SWIPE ───────────────────────────────────────────────────────────────────
+document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        if (dx < 0) {
+            // swipe left → next (only if revealed)
+            if (revealed) nextQuestion();
+            else reveal();
+        }
+        if (dx > 0 && currentIndex > 0) {
+            // swipe right → go back (optional, do nothing for now)
+        }
+    }
+}, { passive: true });
+
+// ─── CONFETTI ────────────────────────────────────────────────────────────────
+function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#4ade80','#22c55e','#f5c842','#f8fafc','#86efac','#fbbf24'];
+    const pieces = Array.from({ length: 80 }, () => ({
+        x: Math.random() * canvas.width,
+        y: -10 - Math.random() * 100,
+        r: 4 + Math.random() * 6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 3,
+        vy: 2 + Math.random() * 3,
+        spin: (Math.random() - 0.5) * 0.2,
+        angle: Math.random() * Math.PI * 2,
+        shape: Math.random() > 0.5 ? 'rect' : 'circle',
+    }));
+
+    let frame = 0;
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle);
+            ctx.fillStyle = p.color;
+            if (p.shape === 'rect') {
+                ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+            } else {
+                ctx.beginPath();
+                ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+            p.x += p.vx;
+            p.y += p.vy;
+            p.angle += p.spin;
+            p.vy += 0.05;
+        });
+        frame++;
+        if (frame < 180) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    draw();
+}
+
+// ─── START ───────────────────────────────────────────────────────────────────
+prepareData();
+updateCard();
+</script>
 </body>
 </html>
