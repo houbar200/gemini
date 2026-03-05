@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -276,6 +277,159 @@
             opacity: 0.7;
         }
 
+        /* ──────────────── START SCREEN ──────────────── */
+        .start-screen {
+            position: fixed; inset: 0;
+            background: var(--bg);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 24px 36px;
+            overflow-y: auto;
+        }
+        .start-screen.hidden { display: none; }
+
+        .start-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #fff 40%, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+        .start-sub {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 32px;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .start-section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            align-self: flex-start;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 10px;
+        }
+
+        .cat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 12px;
+        }
+
+        .cat-btn {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: 18px;
+            padding: 16px 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .cat-btn:active { transform: scale(0.96); }
+
+        .cat-btn.selected {
+            border-color: var(--primary);
+            background: rgba(74,222,128,0.08);
+            box-shadow: 0 0 20px rgba(74,222,128,0.1);
+        }
+
+        .cat-btn .cat-emoji { font-size: 1.6rem; flex-shrink: 0; }
+
+        .cat-btn-info { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+        .cat-btn-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .cat-btn-count { font-size: 0.72rem; color: var(--text-dim); }
+
+        .cat-check {
+            position: absolute; top: 10px; right: 10px;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.6rem;
+            transition: all 0.18s;
+            background: transparent;
+        }
+        .cat-btn.selected .cat-check {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #071a0f;
+        }
+        .cat-btn.selected .cat-check::after { content: '✓'; font-weight: 900; }
+
+        .all-btn {
+            width: 100%;
+            max-width: 400px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: 18px;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+            margin-bottom: 24px;
+        }
+        .all-btn:active { transform: scale(0.97); }
+        .all-btn.selected {
+            border-color: var(--gold);
+            background: rgba(245,200,66,0.06);
+            box-shadow: 0 0 20px rgba(245,200,66,0.08);
+        }
+        .all-btn .cat-emoji { font-size: 1.5rem; }
+        .all-btn-info { flex: 1; }
+        .all-btn-name { font-size: 0.95rem; font-weight: 600; color: var(--text); text-align: left; }
+        .all-btn-sub  { font-size: 0.75rem; color: var(--text-dim); text-align: left; }
+        .all-btn .cat-check { position: static; margin-left: auto; flex-shrink: 0; }
+        .all-btn.selected .cat-check {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #0a0a00;
+        }
+
+        .start-cta {
+            width: 100%; max-width: 400px;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary2), var(--primary));
+            border: none;
+            border-radius: 20px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #071a0f;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 32px rgba(74,222,128,0.25);
+            transition: all 0.18s;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .start-cta.active {
+            opacity: 1;
+            pointer-events: all;
+            box-shadow: 0 4px 32px rgba(74,222,128,0.35);
+        }
+        .start-cta:active { transform: scale(0.97); }
+
         /* ──────────────── FINISH SCREEN ──────────────── */
         .finish-screen {
             display: none;
@@ -404,6 +558,29 @@
 </head>
 <body>
 
+<!-- Start screen -->
+<div class="start-screen" id="start-screen">
+    <div class="start-logo">Atlas Plemen</div>
+    <div class="start-sub">Vyber kategorie pro studium</div>
+
+    <div class="start-section-label">Jednotlivé kategorie</div>
+    <div class="cat-grid" id="cat-grid">
+        <!-- generated by JS -->
+    </div>
+
+    <div class="start-section-label">Nebo všechno najednou</div>
+    <div class="all-btn" id="all-btn" onclick="toggleAll()">
+        <div class="cat-emoji">🌍</div>
+        <div class="all-btn-info">
+            <div class="all-btn-name">Všechna plemena</div>
+            <div class="all-btn-sub" id="all-count">44 karet · mix všech kategorií</div>
+        </div>
+        <div class="cat-check" id="all-check"></div>
+    </div>
+
+    <button class="start-cta" id="start-cta" onclick="startQuiz()">Spustit →</button>
+</div>
+
 <!-- Confetti -->
 <canvas id="confetti-canvas"></canvas>
 
@@ -475,7 +652,7 @@ const seznamSouboru = [
     { file: "Holštýn.jpg",                     cat: "🐄", catName: "Skot" },
     { file: "Jersey.jpg",                      cat: "🐄", catName: "Skot" },
     { file: "Piemontese.jpg",                  cat: "🐄", catName: "Skot" },
-    { file: "Brahmánka.jpg",                   cat: "🐄", catName: "Skot" },
+    { file: "Brahmánka.jpg",                   cat: "🦆", catName: "Drůbež" },
     { file: "Gasconne.png",                    cat: "🐄", catName: "Skot" },
     { file: "Duroc.jpg",                       cat: "🐷", catName: "Prasata" },
     { file: "Hampshire.jpg",                   cat: "🐷", catName: "Prasata" },
@@ -484,7 +661,7 @@ const seznamSouboru = [
     { file: "Pietrain.jpg",                    cat: "🐷", catName: "Prasata" },
     { file: "Přeštické černostrakaté.jpg",     cat: "🐷", catName: "Prasata" },
     { file: "České bílé ušlechtilé.jpg",       cat: "🐷", catName: "Prasata" },
-    { file: "Moravský bílý hnědooký.jpg",      cat: "🐷", catName: "Prasata" },
+    { file: "Moravský bílý hnědooký.jpg",      cat: "🐰", catName: "Králíci" },
     { file: "Arabský plnokrevník.jpg",         cat: "🐴", catName: "Koně" },
     { file: "Českomoravský belgický kůň.jpg",  cat: "🐴", catName: "Koně" },
     { file: "Hafling.webp",                    cat: "🐴", catName: "Koně" },
@@ -503,8 +680,8 @@ const seznamSouboru = [
     { file: "Suffolk.jpg",                     cat: "🐑", catName: "Ovce" },
     { file: "Texel.jpg",                       cat: "🐑", catName: "Ovce" },
     { file: "Valaška.jpg",                     cat: "🐑", catName: "Ovce" },
-    { file: "Hedvábnička.jpg",                 cat: "🐑", catName: "Ovce" },
-    { file: "Český strakáč.jpg",               cat: "🐑", catName: "Ovce" },
+    { file: "Hedvábnička.jpg",                 cat: "🦆", catName: "Drůbež" },
+    { file: "Český strakáč.jpg",               cat: "🐰", catName: "Králíci" },
     { file: "Koza anglonúbijská.jpg",          cat: "🐐", catName: "Kozy" },
     { file: "Koza Bílá Krátkosrtá.webp",       cat: "🐐", catName: "Kozy" },
     { file: "Koza hnědá krátkosrstá.webp",     cat: "🐐", catName: "Kozy" },
@@ -636,18 +813,123 @@ function showFinish() {
     if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
 }
 
-function restart() {
-    rounds++;
-    currentIndex = 0;
+// ─── START SCREEN ────────────────────────────────────────────────────────────
+const categories = [
+    { key: 'Skot',    emoji: '🐄', label: 'Skot' },
+    { key: 'Prasata', emoji: '🐷', label: 'Prasata' },
+    { key: 'Koně',    emoji: '🐴', label: 'Koně' },
+    { key: 'Ovce',    emoji: '🐑', label: 'Ovce' },
+    { key: 'Kozy',    emoji: '🐐', label: 'Kozy' },
+    { key: 'Králíci', emoji: '🐰', label: 'Králíci' },
+    { key: 'Drůbež',  emoji: '🦆', label: 'Drůbež' },
+];
+
+let selectedCats = new Set();
+let allSelected = false;
+
+function buildCatGrid() {
+    const grid = document.getElementById('cat-grid');
+    grid.innerHTML = '';
+    categories.forEach(cat => {
+        const count = seznamSouboru.filter(s => s.catName === cat.key).length;
+        const btn = document.createElement('div');
+        btn.className = 'cat-btn';
+        btn.id = 'cat-' + cat.key;
+        btn.innerHTML = `
+            <div class="cat-emoji">${cat.emoji}</div>
+            <div class="cat-btn-info">
+                <div class="cat-btn-name">${cat.label}</div>
+                <div class="cat-btn-count">${count} plemen</div>
+            </div>
+            <div class="cat-check"></div>
+        `;
+        btn.onclick = () => toggleCat(cat.key);
+        grid.appendChild(btn);
+    });
+
+    const total = seznamSouboru.length;
+    document.getElementById('all-count').textContent = `${total} karet · mix všech kategorií`;
+}
+
+function toggleCat(key) {
+    // deselect "all" if a category is picked
+    if (allSelected) {
+        allSelected = false;
+        document.getElementById('all-btn').classList.remove('selected');
+    }
+    if (selectedCats.has(key)) {
+        selectedCats.delete(key);
+        document.getElementById('cat-' + key).classList.remove('selected');
+    } else {
+        selectedCats.add(key);
+        document.getElementById('cat-' + key).classList.add('selected');
+    }
+    updateCta();
+}
+
+function toggleAll() {
+    // deselect individual cats
+    selectedCats.clear();
+    categories.forEach(c => document.getElementById('cat-' + c.key).classList.remove('selected'));
+
+    allSelected = !allSelected;
+    document.getElementById('all-btn').classList.toggle('selected', allSelected);
+    updateCta();
+}
+
+function updateCta() {
+    const btn = document.getElementById('start-cta');
+    const hasSelection = allSelected || selectedCats.size > 0;
+    btn.classList.toggle('active', hasSelection);
+
+    if (hasSelection) {
+        const count = allSelected
+            ? seznamSouboru.length
+            : seznamSouboru.filter(s => selectedCats.has(s.catName)).length;
+        btn.textContent = `Spustit ${count} karet →`;
+    } else {
+        btn.textContent = 'Spustit →';
+    }
+}
+
+function startQuiz() {
+    let filtered;
+    if (allSelected) {
+        filtered = [...seznamSouboru];
+    } else {
+        filtered = seznamSouboru.filter(s => selectedCats.has(s.catName));
+    }
+
+    quizData = filtered.map(item => ({
+        name: getName(item.file),
+        img: item.file,
+        cat: item.cat,
+        catName: item.catName
+    }));
     shuffle(quizData);
+    currentIndex = 0;
+    rounds = 1;
 
-    document.getElementById('finish-screen').classList.remove('visible');
-    document.getElementById('ring-fill').style.strokeDashoffset = '326';
-
+    document.getElementById('start-screen').classList.add('hidden');
     updateCard();
 }
 
-// ─── SWIPE ───────────────────────────────────────────────────────────────────
+// On finish → go back to start screen on restart
+function restart() {
+    document.getElementById('finish-screen').classList.remove('visible');
+    document.getElementById('ring-fill').style.strokeDashoffset = '326';
+    // reset and show start screen again
+    selectedCats.clear();
+    allSelected = false;
+    categories.forEach(c => document.getElementById('cat-' + c.key).classList.remove('selected'));
+    document.getElementById('all-btn').classList.remove('selected');
+    updateCta();
+    document.getElementById('start-screen').classList.remove('hidden');
+}
+
+// ─── START ───────────────────────────────────────────────────────────────────
+buildCatGrid();
+
 document.addEventListener('touchstart', e => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
@@ -716,9 +998,7 @@ function launchConfetti() {
     draw();
 }
 
-// ─── START ───────────────────────────────────────────────────────────────────
-prepareData();
-updateCard();
+
 </script>
 </body>
 </html>
