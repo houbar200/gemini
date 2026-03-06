@@ -970,7 +970,7 @@
 
     <div class="ss-btn-row">
         <button class="ss-btn ss-btn-secondary" onclick="goBackToStart()">← Kategorie</button>
-        <button class="ss-btn ss-btn-primary" onclick="restart()">🔄 Znovu</button>
+        <button class="ss-btn ss-btn-primary" onclick="replayQuiz()">🔄 Znovu</button>
     </div>
 </div>
 
@@ -1193,12 +1193,19 @@ function goBackToStart() {
 
 // ─── FINISH ──────────────────────────────────────────────────────────────────
 function showFinish() {
-    // Determine category label for splash
     const cats = [...new Set(quizData.map(q => q.catName))];
-    const catLabel = cats.length === 1 ? cats[0] : 'Vše';
-    const catEmoji = cats.length === 1
-        ? (quizData.find(q => q.catName === cats[0])?.cat || '🌍')
-        : '🌍';
+    let catLabel, catEmoji;
+
+    if (isRepeatMode) {
+        catLabel = 'Opakování';
+        catEmoji = '📚';
+    } else if (cats.length === 1) {
+        catLabel = cats[0];
+        catEmoji = quizData.find(q => q.catName === cats[0])?.cat || '🌍';
+    } else {
+        catLabel = 'Mix';
+        catEmoji = '🌍';
+    }
 
     showCompletionSplash(catEmoji, catLabel, () => showSessionStats(catEmoji, catLabel));
 }
@@ -1414,21 +1421,38 @@ function startQuiz() {
     updateCard();
 }
 
-function restart() {
-    document.getElementById('finish-screen').classList.remove('visible');
+function replayQuiz() {
     document.getElementById('session-stats').classList.remove('visible');
-    document.getElementById('ring-fill').style.strokeDashoffset = '326';
-    selectedCats.clear();
-    allSelected = false;
-    repeatSelected = false;
-    categories.forEach(c => document.getElementById('cat-' + c.key).classList.remove('selected'));
-    document.getElementById('all-btn').classList.remove('selected');
-    document.getElementById('repeat-btn').classList.remove('selected');
-    updateRepeatBtn();
-    updateCta();
-    document.getElementById('start-screen').classList.remove('hidden');
-}
 
+    // Rebuild same data from original source
+    let filtered;
+    if (isRepeatMode) {
+        const wrong = getWrongSet();
+        filtered = seznamSouboru.filter(s => wrong.has(getName(s.file)));
+    } else if (allSelected) {
+        filtered = [...seznamSouboru];
+    } else {
+        filtered = seznamSouboru.filter(s => selectedCats.has(s.catName));
+    }
+
+    quizData = filtered.map(item => ({
+        name: getName(item.file),
+        img: item.file,
+        cat: item.cat,
+        catName: item.catName
+    }));
+    shuffle(quizData);
+    currentIndex = 0;
+    rounds++;
+    sessionKnew = 0;
+    sessionDidnt = 0;
+    sessionWrongNames = [];
+
+    const wrap = document.getElementById('card-wrap');
+    wrap.classList.add('anim-in');
+    setTimeout(() => wrap.classList.remove('anim-in'), 400);
+    updateCard();
+}
 // ─── START ───────────────────────────────────────────────────────────────────
 buildCatGrid();
 
