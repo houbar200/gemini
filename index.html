@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -541,12 +540,87 @@
         }
         .btn-restart:active { transform: scale(0.97); }
 
-        /* ──────────────── CARD FLIP ANIMATION ──────────────── */
+        /* ──────────────── CARD ANIMATIONS ──────────────── */
         @keyframes cardIn {
             from { opacity: 0; transform: translateY(18px) scale(0.97); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .card-wrap { animation: cardIn 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+        @keyframes slideOutLeft {
+            from { opacity: 1; transform: translateX(0) rotate(0deg); }
+            to   { opacity: 0; transform: translateX(-110%) rotate(-8deg); }
+        }
+        @keyframes slideOutRight {
+            from { opacity: 1; transform: translateX(0) rotate(0deg); }
+            to   { opacity: 0; transform: translateX(110%) rotate(8deg); }
+        }
+        @keyframes slideInFromRight {
+            from { opacity: 0; transform: translateX(60px) scale(0.96); }
+            to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        .card-wrap.anim-in    { animation: slideInFromRight 0.38s cubic-bezier(0.4,0,0.2,1) both; }
+        .card-wrap.anim-out-left  { animation: slideOutLeft  0.3s cubic-bezier(0.4,0,0.2,1) both; }
+        .card-wrap.anim-out-right { animation: slideOutRight 0.3s cubic-bezier(0.4,0,0.2,1) both; }
+
+        /* ── Know / Don't know buttons ── */
+        .btn-know {
+            background: rgba(74,222,128,0.12);
+            color: var(--primary);
+            border: 1.5px solid rgba(74,222,128,0.35);
+        }
+        .btn-know:active { background: rgba(74,222,128,0.25); }
+        .btn-dontknow {
+            background: rgba(239,68,68,0.1);
+            color: #f87171;
+            border: 1.5px solid rgba(239,68,68,0.3);
+        }
+        .btn-dontknow:active { background: rgba(239,68,68,0.2); }
+
+        /* ── Back arrow ── */
+        .back-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.18s;
+            flex-shrink: 0;
+        }
+        .back-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.08); }
+
+        /* ── Repeat badge on start screen ── */
+        .repeat-btn {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(239,68,68,0.07);
+            border: 1.5px solid rgba(239,68,68,0.25);
+            border-radius: 18px;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+            margin-bottom: 12px;
+        }
+        .repeat-btn:active { transform: scale(0.97); }
+        .repeat-btn.selected {
+            border-color: #f87171;
+            background: rgba(239,68,68,0.12);
+            box-shadow: 0 0 20px rgba(239,68,68,0.1);
+        }
+        .repeat-btn .cat-emoji { font-size: 1.5rem; }
+        .repeat-btn-info { flex: 1; }
+        .repeat-btn-name { font-size: 0.95rem; font-weight: 600; color: var(--text); text-align: left; }
+        .repeat-btn-sub  { font-size: 0.75rem; color: var(--text-dim); text-align: left; }
+        .repeat-btn .cat-check { position: static; margin-left: auto; flex-shrink: 0; }
+        .repeat-btn.selected .cat-check {
+            background: #f87171;
+            border-color: #f87171;
+            color: #fff;
+        }
+        .repeat-btn.selected .cat-check::after { content: '✓'; font-weight: 900; }
 
         /* ──────────────── CONFETTI CANVAS ──────────────── */
         #confetti-canvas {
@@ -562,6 +636,16 @@
 <div class="start-screen" id="start-screen">
     <div class="start-logo">Atlas Plemen</div>
     <div class="start-sub">Vyber kategorie pro studium</div>
+
+    <div class="start-section-label" id="repeat-section-label" style="display:none;">Opakování</div>
+    <div class="repeat-btn" id="repeat-btn" onclick="toggleRepeat()" style="display:none;">
+        <div class="cat-emoji">📚</div>
+        <div class="repeat-btn-info">
+            <div class="repeat-btn-name">Opakování – neznámá</div>
+            <div class="repeat-btn-sub" id="repeat-count">0 karet</div>
+        </div>
+        <div class="cat-check" id="repeat-check"></div>
+    </div>
 
     <div class="start-section-label">Jednotlivé kategorie</div>
     <div class="cat-grid" id="cat-grid">
@@ -586,6 +670,7 @@
 
 <!-- Header -->
 <div class="header">
+    <div class="back-btn" id="back-btn" onclick="goBackToStart()" title="Zpět na výběr kategorií">←</div>
     <div class="logo">Atlas <span>Plemen</span></div>
     <div class="progress-pill" id="progress-pill">— / —</div>
 </div>
@@ -596,7 +681,7 @@
 </div>
 
 <!-- Card -->
-<div class="card-wrap">
+<div class="card-wrap" id="card-wrap">
     <div class="card">
         <div class="img-wrap">
             <div class="badge" id="badge">🐄 Skot</div>
@@ -607,11 +692,14 @@
                 <div class="answer-hidden" id="dots-wrap"></div>
                 <div class="answer-text" id="answer-text"></div>
             </div>
-            <div class="btn-row">
+            <div class="btn-row" id="btn-row-reveal">
                 <button id="reveal-btn" class="btn btn-reveal" onclick="reveal()">👁 Odhalit</button>
-                <button id="next-btn" class="btn btn-next" onclick="nextQuestion()">Další ➔</button>
             </div>
-            <div class="swipe-hint">Swipe vlevo pro další kartu</div>
+            <div class="btn-row" id="btn-row-answer" style="display:none;">
+                <button class="btn btn-dontknow" onclick="answerCard(false)">✗ Neuměl jsem</button>
+                <button class="btn btn-know"     onclick="answerCard(true)">✓ Uměl jsem</button>
+            </div>
+            <div class="swipe-hint" id="swipe-hint">Swipe vlevo pro další kartu</div>
         </div>
     </div>
 </div>
@@ -693,10 +781,25 @@ let quizData = [];
 let currentIndex = 0;
 let rounds = 1;
 let revealed = false;
+let isRepeatMode = false;
 
 // touch/swipe
 let touchStartX = 0;
 let touchStartY = 0;
+
+// ─── WRONG ANSWERS (localStorage) ────────────────────────────────────────────
+function getWrongSet() {
+    return new Set(JSON.parse(localStorage.getItem('atlas_wrong') || '[]'));
+}
+function saveWrongSet(set) {
+    localStorage.setItem('atlas_wrong', JSON.stringify([...set]));
+}
+function addWrong(name) {
+    const s = getWrongSet(); s.add(name); saveWrongSet(s);
+}
+function removeWrong(name) {
+    const s = getWrongSet(); s.delete(name); saveWrongSet(s);
+}
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 function shuffle(arr) {
@@ -711,14 +814,16 @@ function getName(file) {
     return file.substring(0, file.lastIndexOf('.'));
 }
 
-function prepareData() {
-    quizData = seznamSouboru.map(item => ({
-        name: getName(item.file),
-        img: item.file,
-        cat: item.cat,
-        catName: item.catName
-    }));
-    shuffle(quizData);
+// ─── CARD ANIMATION ──────────────────────────────────────────────────────────
+function animateCardOut(direction, cb) {
+    const wrap = document.getElementById('card-wrap');
+    wrap.classList.add(direction === 'left' ? 'anim-out-left' : 'anim-out-right');
+    setTimeout(() => {
+        wrap.classList.remove('anim-out-left', 'anim-out-right');
+        cb();
+        wrap.classList.add('anim-in');
+        setTimeout(() => wrap.classList.remove('anim-in'), 400);
+    }, 280);
 }
 
 // ─── RENDER CARD ─────────────────────────────────────────────────────────────
@@ -728,26 +833,18 @@ function updateCard() {
 
     // progress
     const total = quizData.length;
-    const done = currentIndex;
     document.getElementById('progress-pill').textContent = `${currentIndex + 1} / ${total}`;
-    document.getElementById('progress-fill').style.width = `${(done / total) * 100}%`;
+    document.getElementById('progress-fill').style.width = `${(currentIndex / total) * 100}%`;
 
     // badge
     document.getElementById('badge').textContent = `${animal.cat} ${animal.catName}`;
 
     // image fade
     imgEl.classList.add('loading');
-    const newSrc = animal.img;
     const tmp = new Image();
-    tmp.onload = () => {
-        imgEl.src = newSrc;
-        imgEl.classList.remove('loading');
-    };
-    tmp.onerror = () => {
-        imgEl.src = newSrc;
-        imgEl.classList.remove('loading');
-    };
-    tmp.src = newSrc;
+    tmp.onload = () => { imgEl.src = animal.img; imgEl.classList.remove('loading'); };
+    tmp.onerror = () => { imgEl.src = animal.img; imgEl.classList.remove('loading'); };
+    tmp.src = animal.img;
 
     // answer
     document.getElementById('answer-text').style.display = 'none';
@@ -757,7 +854,6 @@ function updateCard() {
     const dotsWrap = document.getElementById('dots-wrap');
     dotsWrap.style.display = 'flex';
     dotsWrap.innerHTML = '';
-    const wordCount = animal.name.split(' ').length;
     const dotCount = Math.min(animal.name.replace(/ /g,'').length, 14);
     for (let i = 0; i < dotCount; i++) {
         const d = document.createElement('div');
@@ -766,8 +862,9 @@ function updateCard() {
     }
 
     // buttons
-    document.getElementById('reveal-btn').style.display = 'flex';
-    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('btn-row-reveal').style.display = 'flex';
+    document.getElementById('btn-row-answer').style.display = 'none';
+    document.getElementById('swipe-hint').textContent = 'Swipe vlevo pro odhalení';
     revealed = false;
 }
 
@@ -777,17 +874,30 @@ function reveal() {
     revealed = true;
 
     document.getElementById('dots-wrap').style.display = 'none';
-    const at = document.getElementById('answer-text');
-    at.style.display = 'flex';
-
-    document.getElementById('reveal-btn').style.display = 'none';
-    document.getElementById('next-btn').style.display = 'flex';
+    document.getElementById('answer-text').style.display = 'flex';
+    document.getElementById('btn-row-reveal').style.display = 'none';
+    document.getElementById('btn-row-answer').style.display = 'flex';
+    document.getElementById('swipe-hint').textContent = '✓ Uměl jsem  ·  ✗ Neuměl jsem';
 
     if (navigator.vibrate) navigator.vibrate(40);
 }
 
-// ─── NEXT ─────────────────────────────────────────────────────────────────────
-function nextQuestion() {
+// ─── ANSWER (know / don't know) ───────────────────────────────────────────────
+function answerCard(knew) {
+    if (!revealed) return;
+    const animal = quizData[currentIndex];
+
+    if (knew) {
+        removeWrong(animal.name);
+        animateCardOut('right', () => advance());
+    } else {
+        addWrong(animal.name);
+        animateCardOut('left', () => advance());
+    }
+    if (navigator.vibrate) navigator.vibrate(knew ? [30] : [40, 20, 40]);
+}
+
+function advance() {
     currentIndex++;
     if (currentIndex >= quizData.length) {
         showFinish();
@@ -796,19 +906,27 @@ function nextQuestion() {
     updateCard();
 }
 
+// ─── BACK TO START ────────────────────────────────────────────────────────────
+function goBackToStart() {
+    document.getElementById('start-screen').classList.remove('hidden');
+    updateRepeatBtn();
+}
+
 // ─── FINISH ──────────────────────────────────────────────────────────────────
 function showFinish() {
+    const wrongCount = getWrongSet().size;
     document.getElementById('stat-total').textContent = quizData.length;
     document.getElementById('stat-rounds').textContent = rounds;
 
+    // Update finish subtitle
+    const sub = document.getElementById('finish-sub');
+    sub.innerHTML = wrongCount > 0
+        ? `Prošel jsi všechna plemena.<br><span style="color:#f87171;font-size:0.9rem;">📚 ${wrongCount} karet čeká na opakování</span>`
+        : `Prošel jsi všechna plemena!<br><span style="color:var(--primary);font-size:0.9rem;">✓ Vše zvládnuto!</span>`;
+
     const fs = document.getElementById('finish-screen');
     fs.classList.add('visible');
-
-    // Animate ring to 100%
-    setTimeout(() => {
-        document.getElementById('ring-fill').style.strokeDashoffset = '0';
-    }, 100);
-
+    setTimeout(() => { document.getElementById('ring-fill').style.strokeDashoffset = '0'; }, 100);
     launchConfetti();
     if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
 }
@@ -825,7 +943,38 @@ const categories = [
 ];
 
 let selectedCats = new Set();
-let allSelected = false;
+let allSelected  = false;
+let repeatSelected = false;
+
+function updateRepeatBtn() {
+    const wrong = getWrongSet();
+    const label = document.getElementById('repeat-section-label');
+    const btn   = document.getElementById('repeat-btn');
+    const countEl = document.getElementById('repeat-count');
+    if (wrong.size > 0) {
+        label.style.display = 'block';
+        btn.style.display   = 'flex';
+        countEl.textContent = `${wrong.size} karet k procvičení`;
+    } else {
+        label.style.display = 'none';
+        btn.style.display   = 'none';
+        repeatSelected = false;
+        btn.classList.remove('selected');
+    }
+}
+
+function toggleRepeat() {
+    repeatSelected = !repeatSelected;
+    document.getElementById('repeat-btn').classList.toggle('selected', repeatSelected);
+    if (repeatSelected) {
+        // deselect everything else
+        selectedCats.clear();
+        allSelected = false;
+        categories.forEach(c => document.getElementById('cat-' + c.key).classList.remove('selected'));
+        document.getElementById('all-btn').classList.remove('selected');
+    }
+    updateCta();
+}
 
 function buildCatGrid() {
     const grid = document.getElementById('cat-grid');
@@ -849,14 +998,12 @@ function buildCatGrid() {
 
     const total = seznamSouboru.length;
     document.getElementById('all-count').textContent = `${total} karet · mix všech kategorií`;
+    updateRepeatBtn();
 }
 
 function toggleCat(key) {
-    // deselect "all" if a category is picked
-    if (allSelected) {
-        allSelected = false;
-        document.getElementById('all-btn').classList.remove('selected');
-    }
+    if (allSelected) { allSelected = false; document.getElementById('all-btn').classList.remove('selected'); }
+    if (repeatSelected) { repeatSelected = false; document.getElementById('repeat-btn').classList.remove('selected'); }
     if (selectedCats.has(key)) {
         selectedCats.delete(key);
         document.getElementById('cat-' + key).classList.remove('selected');
@@ -868,10 +1015,9 @@ function toggleCat(key) {
 }
 
 function toggleAll() {
-    // deselect individual cats
+    if (repeatSelected) { repeatSelected = false; document.getElementById('repeat-btn').classList.remove('selected'); }
     selectedCats.clear();
     categories.forEach(c => document.getElementById('cat-' + c.key).classList.remove('selected'));
-
     allSelected = !allSelected;
     document.getElementById('all-btn').classList.toggle('selected', allSelected);
     updateCta();
@@ -879,13 +1025,13 @@ function toggleAll() {
 
 function updateCta() {
     const btn = document.getElementById('start-cta');
-    const hasSelection = allSelected || selectedCats.size > 0;
+    const hasSelection = allSelected || selectedCats.size > 0 || repeatSelected;
     btn.classList.toggle('active', hasSelection);
-
     if (hasSelection) {
-        const count = allSelected
-            ? seznamSouboru.length
-            : seznamSouboru.filter(s => selectedCats.has(s.catName)).length;
+        let count;
+        if (repeatSelected) count = getWrongSet().size;
+        else if (allSelected) count = seznamSouboru.length;
+        else count = seznamSouboru.filter(s => selectedCats.has(s.catName)).length;
         btn.textContent = `Spustit ${count} karet →`;
     } else {
         btn.textContent = 'Spustit →';
@@ -894,10 +1040,14 @@ function updateCta() {
 
 function startQuiz() {
     let filtered;
-    if (allSelected) {
-        filtered = [...seznamSouboru];
+    if (repeatSelected) {
+        const wrong = getWrongSet();
+        filtered = seznamSouboru.filter(s => wrong.has(getName(s.file)));
+        isRepeatMode = true;
     } else {
-        filtered = seznamSouboru.filter(s => selectedCats.has(s.catName));
+        if (allSelected) filtered = [...seznamSouboru];
+        else filtered = seznamSouboru.filter(s => selectedCats.has(s.catName));
+        isRepeatMode = false;
     }
 
     quizData = filtered.map(item => ({
@@ -911,18 +1061,25 @@ function startQuiz() {
     rounds = 1;
 
     document.getElementById('start-screen').classList.add('hidden');
+
+    // Animate card in on start
+    const wrap = document.getElementById('card-wrap');
+    wrap.classList.add('anim-in');
+    setTimeout(() => wrap.classList.remove('anim-in'), 400);
+
     updateCard();
 }
 
-// On finish → go back to start screen on restart
 function restart() {
     document.getElementById('finish-screen').classList.remove('visible');
     document.getElementById('ring-fill').style.strokeDashoffset = '326';
-    // reset and show start screen again
     selectedCats.clear();
     allSelected = false;
+    repeatSelected = false;
     categories.forEach(c => document.getElementById('cat-' + c.key).classList.remove('selected'));
     document.getElementById('all-btn').classList.remove('selected');
+    document.getElementById('repeat-btn').classList.remove('selected');
+    updateRepeatBtn();
     updateCta();
     document.getElementById('start-screen').classList.remove('hidden');
 }
@@ -936,17 +1093,13 @@ document.addEventListener('touchstart', e => {
 }, { passive: true });
 
 document.addEventListener('touchend', e => {
+    if (document.getElementById('start-screen') && !document.getElementById('start-screen').classList.contains('hidden')) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-        if (dx < 0) {
-            // swipe left → next (only if revealed)
-            if (revealed) nextQuestion();
-            else reveal();
-        }
-        if (dx > 0 && currentIndex > 0) {
-            // swipe right → go back (optional, do nothing for now)
-        }
+        if (!revealed) { reveal(); return; }
+        if (dx < 0) answerCard(true);   // swipe left = uměl jsem
+        if (dx > 0) answerCard(false);  // swipe right = neuměl jsem
     }
 }, { passive: true });
 
