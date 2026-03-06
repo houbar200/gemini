@@ -540,7 +540,220 @@
         }
         .btn-restart:active { transform: scale(0.97); }
 
-        /* ──────────────── CARD ANIMATIONS ──────────────── */
+        /* ──────────────── COMPLETION SPLASH ──────────────── */
+        .completion-splash {
+            display: none;
+            position: fixed; inset: 0;
+            background: var(--bg);
+            z-index: 110;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 32px 24px;
+        }
+        .completion-splash.visible { display: flex; }
+
+        @keyframes splashEmoji {
+            0%   { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+            60%  { transform: scale(1.15) rotate(5deg);  opacity: 1; }
+            100% { transform: scale(1) rotate(0deg);     opacity: 1; }
+        }
+        @keyframes splashTitle {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes splashFadeOut {
+            from { opacity: 1; }
+            to   { opacity: 0; }
+        }
+        .splash-emoji {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: splashEmoji 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+        .splash-cat-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--text);
+            margin-bottom: 8px;
+            animation: splashTitle 0.5s ease 0.3s both;
+        }
+        .splash-done {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: splashTitle 0.5s ease 0.5s both;
+        }
+        .splash-progress-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-top: 32px;
+            overflow: hidden;
+            animation: splashTitle 0.5s ease 0.6s both;
+        }
+        .splash-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 1.8s linear;
+            box-shadow: 0 0 8px rgba(74,222,128,0.5);
+        }
+        .completion-splash.fade-out {
+            animation: splashFadeOut 0.5s ease forwards;
+        }
+
+        /* ──────────────── SESSION STATS SCREEN ──────────────── */
+        .session-stats {
+            display: none;
+            position: fixed; inset: 0;
+            background: var(--bg);
+            z-index: 110;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 20px 32px;
+            overflow-y: auto;
+        }
+        .session-stats.visible { display: flex; }
+
+        @keyframes statsIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .session-stats.visible > * {
+            animation: statsIn 0.4s cubic-bezier(0.4,0,0.2,1) both;
+        }
+
+        .ss-header {
+            width: 100%; max-width: 400px;
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 20px;
+        }
+        .ss-cat-icon { font-size: 2rem; }
+        .ss-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem; font-weight: 900;
+            color: var(--text);
+        }
+        .ss-subtitle { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
+
+        .ss-score-row {
+            display: flex; gap: 12px;
+            width: 100%; max-width: 400px;
+            margin-bottom: 20px;
+        }
+        .ss-score-box {
+            flex: 1;
+            border-radius: 20px;
+            padding: 18px 12px;
+            text-align: center;
+            border: 1px solid;
+        }
+        .ss-score-box.knew {
+            background: rgba(74,222,128,0.06);
+            border-color: rgba(74,222,128,0.2);
+        }
+        .ss-score-box.didnt {
+            background: rgba(239,68,68,0.06);
+            border-color: rgba(239,68,68,0.2);
+        }
+        .ss-score-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem; font-weight: 900;
+            line-height: 1;
+        }
+        .ss-score-box.knew .ss-score-num { color: var(--primary); }
+        .ss-score-box.didnt .ss-score-num { color: #f87171; }
+        .ss-score-label {
+            font-size: 0.68rem; font-weight: 600;
+            color: var(--text-dim); letter-spacing: 0.5px;
+            text-transform: uppercase; margin-top: 6px;
+        }
+
+        /* donut chart */
+        .ss-donut-wrap {
+            position: relative; width: 100px; height: 100px;
+            margin: 0 auto 20px;
+        }
+        .ss-donut-wrap svg { width: 100px; height: 100px; transform: rotate(-90deg); }
+        .ss-donut-center {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .ss-donut-pct {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem; font-weight: 900; color: var(--text);
+        }
+        .ss-donut-sub { font-size: 0.55rem; color: var(--text-dim); letter-spacing: 0.5px; }
+
+        /* wrong list */
+        .ss-section-title {
+            font-size: 0.68rem; font-weight: 700;
+            color: var(--text-dim); letter-spacing: 1.5px;
+            text-transform: uppercase;
+            align-self: flex-start;
+            width: 100%; max-width: 400px;
+            margin-bottom: 8px; margin-top: 4px;
+        }
+        .ss-wrong-list {
+            width: 100%; max-width: 400px;
+            display: flex; flex-direction: column; gap: 6px;
+            margin-bottom: 20px;
+        }
+        .ss-wrong-item {
+            background: rgba(239,68,68,0.05);
+            border: 1px solid rgba(239,68,68,0.15);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.85rem; font-weight: 600;
+            color: var(--text);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .ss-wrong-item::before { content: '✗'; color: #f87171; font-size: 0.75rem; }
+
+        .ss-all-correct {
+            background: rgba(74,222,128,0.06);
+            border: 1px solid rgba(74,222,128,0.2);
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 0.85rem; font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            width: 100%; max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .ss-btn-row {
+            display: flex; gap: 10px;
+            width: 100%; max-width: 400px;
+        }
+        .ss-btn {
+            flex: 1; padding: 16px 10px;
+            border: none; border-radius: 18px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; letter-spacing: 0.3px;
+            transition: all 0.18s;
+        }
+        .ss-btn:active { transform: scale(0.97); }
+        .ss-btn-primary {
+            background: linear-gradient(135deg, var(--primary2), var(--primary));
+            color: #071a0f;
+            box-shadow: 0 4px 24px rgba(74,222,128,0.25);
+        }
+        .ss-btn-secondary {
+            background: transparent;
+            color: var(--text-mid);
+            border: 1.5px solid var(--border);
+        }
         @keyframes cardIn {
             from { opacity: 0; transform: translateY(18px) scale(0.97); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -704,6 +917,63 @@
     </div>
 </div>
 
+<!-- Completion splash -->
+<div class="completion-splash" id="completion-splash">
+    <span class="splash-emoji" id="splash-emoji">🐄</span>
+    <div class="splash-cat-name" id="splash-cat-name">Skot</div>
+    <div class="splash-done">✓ Dokončeno!</div>
+    <div class="splash-progress-bar">
+        <div class="splash-progress-fill" id="splash-fill"></div>
+    </div>
+</div>
+
+<!-- Session stats -->
+<div class="session-stats" id="session-stats">
+    <div class="ss-header">
+        <div class="ss-cat-icon" id="ss-cat-icon">🐄</div>
+        <div>
+            <div class="ss-title" id="ss-cat-title">Výsledky</div>
+            <div class="ss-subtitle" id="ss-cat-subtitle">Dokončeno</div>
+        </div>
+    </div>
+
+    <div class="ss-donut-wrap">
+        <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"/>
+            <circle cx="50" cy="50" r="40" fill="none" stroke="var(--primary)" stroke-width="12"
+                stroke-linecap="round"
+                stroke-dasharray="251"
+                stroke-dashoffset="251"
+                id="ss-donut-arc"
+                style="transition: stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.2s;"/>
+        </svg>
+        <div class="ss-donut-center">
+            <div class="ss-donut-pct" id="ss-pct">0%</div>
+            <div class="ss-donut-sub">UMĚL</div>
+        </div>
+    </div>
+
+    <div class="ss-score-row">
+        <div class="ss-score-box knew">
+            <div class="ss-score-num" id="ss-knew">0</div>
+            <div class="ss-score-label">✓ Uměl jsem</div>
+        </div>
+        <div class="ss-score-box didnt">
+            <div class="ss-score-num" id="ss-didnt">0</div>
+            <div class="ss-score-label">✗ Neuměl jsem</div>
+        </div>
+    </div>
+
+    <div class="ss-section-title" id="ss-wrong-title" style="display:none;">Neznámá plemena</div>
+    <div class="ss-wrong-list" id="ss-wrong-list"></div>
+    <div class="ss-all-correct" id="ss-all-correct" style="display:none;">🎉 Perfektní výsledek! Vše správně.</div>
+
+    <div class="ss-btn-row">
+        <button class="ss-btn ss-btn-secondary" onclick="goBackToStart()">← Kategorie</button>
+        <button class="ss-btn ss-btn-primary" onclick="restart()">🔄 Znovu</button>
+    </div>
+</div>
+
 <!-- Finish screen -->
 <div class="finish-screen" id="finish-screen">
     <div class="finish-ring">
@@ -782,6 +1052,11 @@ let currentIndex = 0;
 let rounds = 1;
 let revealed = false;
 let isRepeatMode = false;
+
+// session stats tracking
+let sessionKnew = 0;
+let sessionDidnt = 0;
+let sessionWrongNames = [];
 
 // touch/swipe
 let touchStartX = 0;
@@ -888,9 +1163,12 @@ function answerCard(knew) {
     const animal = quizData[currentIndex];
 
     if (knew) {
+        sessionKnew++;
         removeWrong(animal.name);
         animateCardOut('right', () => advance());
     } else {
+        sessionDidnt++;
+        sessionWrongNames.push(animal.name);
         addWrong(animal.name);
         animateCardOut('left', () => advance());
     }
@@ -908,27 +1186,90 @@ function advance() {
 
 // ─── BACK TO START ────────────────────────────────────────────────────────────
 function goBackToStart() {
+    document.getElementById('session-stats').classList.remove('visible');
     document.getElementById('start-screen').classList.remove('hidden');
     updateRepeatBtn();
 }
 
 // ─── FINISH ──────────────────────────────────────────────────────────────────
 function showFinish() {
-    const wrongCount = getWrongSet().size;
-    document.getElementById('stat-total').textContent = quizData.length;
-    document.getElementById('stat-rounds').textContent = rounds;
+    // Determine category label for splash
+    const cats = [...new Set(quizData.map(q => q.catName))];
+    const catLabel = cats.length === 1 ? cats[0] : 'Vše';
+    const catEmoji = cats.length === 1
+        ? (quizData.find(q => q.catName === cats[0])?.cat || '🌍')
+        : '🌍';
 
-    // Update finish subtitle
-    const sub = document.getElementById('finish-sub');
-    sub.innerHTML = wrongCount > 0
-        ? `Prošel jsi všechna plemena.<br><span style="color:#f87171;font-size:0.9rem;">📚 ${wrongCount} karet čeká na opakování</span>`
-        : `Prošel jsi všechna plemena!<br><span style="color:var(--primary);font-size:0.9rem;">✓ Vše zvládnuto!</span>`;
+    showCompletionSplash(catEmoji, catLabel, () => showSessionStats(catEmoji, catLabel));
+}
 
-    const fs = document.getElementById('finish-screen');
-    fs.classList.add('visible');
-    setTimeout(() => { document.getElementById('ring-fill').style.strokeDashoffset = '0'; }, 100);
+function showCompletionSplash(emoji, label, onDone) {
+    const splash = document.getElementById('completion-splash');
+    document.getElementById('splash-emoji').textContent = emoji;
+    document.getElementById('splash-cat-name').textContent = label;
+    splash.classList.add('visible');
+
+    // Start progress bar after a tick
+    setTimeout(() => {
+        document.getElementById('splash-fill').style.width = '100%';
+    }, 50);
+
+    // Fade out and transition after 2.2s
+    setTimeout(() => {
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+            splash.classList.remove('visible', 'fade-out');
+            onDone();
+        }, 500);
+    }, 2200);
+
     launchConfetti();
     if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+}
+
+function showSessionStats(catEmoji, catLabel) {
+    const total = sessionKnew + sessionDidnt;
+    const pct = total > 0 ? Math.round((sessionKnew / total) * 100) : 0;
+
+    document.getElementById('ss-cat-icon').textContent = catEmoji;
+    document.getElementById('ss-cat-title').textContent = catLabel;
+    document.getElementById('ss-cat-subtitle').textContent = `${total} karet · ${new Date().toLocaleTimeString('cs', {hour:'2-digit', minute:'2-digit'})}`;
+    document.getElementById('ss-knew').textContent = sessionKnew;
+    document.getElementById('ss-didnt').textContent = sessionDidnt;
+    document.getElementById('ss-pct').textContent = pct + '%';
+
+    // Donut arc (circumference = 251)
+    const offset = 251 - (251 * pct / 100);
+    setTimeout(() => {
+        document.getElementById('ss-donut-arc').style.strokeDashoffset = offset;
+        // Color based on score
+        const arc = document.getElementById('ss-donut-arc');
+        if (pct >= 80) arc.style.stroke = 'var(--primary)';
+        else if (pct >= 50) arc.style.stroke = 'var(--gold)';
+        else arc.style.stroke = '#f87171';
+    }, 100);
+
+    // Wrong list
+    const wrongList = document.getElementById('ss-wrong-list');
+    const wrongTitle = document.getElementById('ss-wrong-title');
+    const allCorrect = document.getElementById('ss-all-correct');
+    wrongList.innerHTML = '';
+
+    if (sessionWrongNames.length === 0) {
+        allCorrect.style.display = 'block';
+        wrongTitle.style.display = 'none';
+    } else {
+        allCorrect.style.display = 'none';
+        wrongTitle.style.display = 'block';
+        sessionWrongNames.forEach(name => {
+            const item = document.createElement('div');
+            item.className = 'ss-wrong-item';
+            item.textContent = name;
+            wrongList.appendChild(item);
+        });
+    }
+
+    document.getElementById('session-stats').classList.add('visible');
 }
 
 // ─── START SCREEN ────────────────────────────────────────────────────────────
@@ -1059,6 +1400,9 @@ function startQuiz() {
     shuffle(quizData);
     currentIndex = 0;
     rounds = 1;
+    sessionKnew = 0;
+    sessionDidnt = 0;
+    sessionWrongNames = [];
 
     document.getElementById('start-screen').classList.add('hidden');
 
@@ -1072,6 +1416,7 @@ function startQuiz() {
 
 function restart() {
     document.getElementById('finish-screen').classList.remove('visible');
+    document.getElementById('session-stats').classList.remove('visible');
     document.getElementById('ring-fill').style.strokeDashoffset = '326';
     selectedCats.clear();
     allSelected = false;
