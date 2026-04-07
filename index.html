@@ -45,7 +45,6 @@
             padding: 16px;
         }
 
-        /* ── Subtle background grid ── */
         body::before {
             content: '';
             position: fixed; inset: 0;
@@ -57,7 +56,6 @@
             z-index: 0;
         }
 
-        /* ── Glowing orb ── */
         body::after {
             content: '';
             position: fixed;
@@ -69,7 +67,6 @@
             z-index: 0;
         }
 
-        /* ──────────────── HEADER ──────────────── */
         .header {
             width: 100%; max-width: 440px;
             display: flex; align-items: center; justify-content: space-between;
@@ -96,7 +93,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* ──────────────── PROGRESS BAR ──────────────── */
         .progress-track {
             width: 100%; max-width: 440px;
             height: 3px;
@@ -114,7 +110,6 @@
             box-shadow: 0 0 8px rgba(74,222,128,0.5);
         }
 
-        /* ──────────────── CARD ──────────────── */
         .card-wrap {
             width: 100%; max-width: 440px;
             position: relative; z-index: 1;
@@ -134,7 +129,6 @@
             flex-direction: column;
         }
 
-        /* Image area */
         .img-wrap {
             position: relative;
             width: 100%;
@@ -151,7 +145,6 @@
         }
         .animal-img.loading { opacity: 0; transform: scale(1.03); }
 
-        /* Gradient overlay on image */
         .img-wrap::after {
             content: '';
             position: absolute; inset: 0;
@@ -159,7 +152,6 @@
             pointer-events: none;
         }
 
-        /* Category badge */
         .badge {
             position: absolute;
             top: 14px; left: 14px;
@@ -176,7 +168,6 @@
             display: flex; align-items: center; gap: 5px;
         }
 
-        /* card body */
         .card-body {
             padding: 16px 20px 20px;
             display: flex;
@@ -184,7 +175,6 @@
             gap: 14px;
         }
 
-        /* Answer area */
         .answer-wrap {
             min-height: 64px;
             display: flex;
@@ -208,7 +198,7 @@
 
         .answer-text {
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--primary);
             text-align: center;
@@ -222,7 +212,6 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* Buttons */
         .btn-row { display: flex; gap: 10px; }
 
         .btn {
@@ -266,7 +255,6 @@
             box-shadow: 0 4px 32px rgba(74,222,128,0.4);
         }
 
-        /* swipe hint */
         .swipe-hint {
             text-align: center;
             font-size: 0.72rem;
@@ -276,160 +264,6 @@
             opacity: 0.7;
         }
 
-        /* ──────────────── START SCREEN ──────────────── */
-        .start-screen {
-            position: fixed; inset: 0;
-            background: var(--bg);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 28px 24px 36px;
-            overflow-y: auto;
-        }
-        .start-screen.hidden { display: none; }
-
-        .start-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin-bottom: 4px;
-            background: linear-gradient(135deg, #fff 40%, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-        }
-        .start-sub {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            margin-bottom: 32px;
-            letter-spacing: 0.5px;
-            text-align: center;
-        }
-
-        .start-section-label {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--text-dim);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            align-self: flex-start;
-            width: 100%;
-            max-width: 400px;
-            margin-bottom: 10px;
-        }
-
-        .cat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            width: 100%;
-            max-width: 400px;
-            margin-bottom: 12px;
-        }
-
-        .cat-btn {
-            background: var(--surface);
-            border: 1.5px solid var(--border);
-            border-radius: 18px;
-            padding: 16px 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
-            position: relative;
-            overflow: hidden;
-        }
-        .cat-btn:active { transform: scale(0.96); }
-
-        .cat-btn.selected {
-            border-color: var(--primary);
-            background: rgba(74,222,128,0.08);
-            box-shadow: 0 0 20px rgba(74,222,128,0.1);
-        }
-
-        .cat-btn .cat-emoji { font-size: 1.6rem; flex-shrink: 0; }
-
-        .cat-btn-info { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
-        .cat-btn-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
-        .cat-btn-count { font-size: 0.72rem; color: var(--text-dim); }
-
-        .cat-check {
-            position: absolute; top: 10px; right: 10px;
-            width: 18px; height: 18px;
-            border-radius: 50%;
-            border: 1.5px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.6rem;
-            transition: all 0.18s;
-            background: transparent;
-        }
-        .cat-btn.selected .cat-check {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #071a0f;
-        }
-        .cat-btn.selected .cat-check::after { content: '✓'; font-weight: 900; }
-
-        .all-btn {
-            width: 100%;
-            max-width: 400px;
-            background: var(--surface);
-            border: 1.5px solid var(--border);
-            border-radius: 18px;
-            padding: 16px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
-            margin-bottom: 24px;
-        }
-        .all-btn:active { transform: scale(0.97); }
-        .all-btn.selected {
-            border-color: var(--gold);
-            background: rgba(245,200,66,0.06);
-            box-shadow: 0 0 20px rgba(245,200,66,0.08);
-        }
-        .all-btn .cat-emoji { font-size: 1.5rem; }
-        .all-btn-info { flex: 1; }
-        .all-btn-name { font-size: 0.95rem; font-weight: 600; color: var(--text); text-align: left; }
-        .all-btn-sub  { font-size: 0.75rem; color: var(--text-dim); text-align: left; }
-        .all-btn .cat-check { position: static; margin-left: auto; flex-shrink: 0; }
-        .all-btn.selected .cat-check {
-            background: var(--gold);
-            border-color: var(--gold);
-            color: #0a0a00;
-        }
-
-        .start-cta {
-            width: 100%; max-width: 400px;
-            padding: 18px;
-            background: linear-gradient(135deg, var(--primary2), var(--primary));
-            border: none;
-            border-radius: 20px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #071a0f;
-            cursor: pointer;
-            letter-spacing: 0.3px;
-            box-shadow: 0 4px 32px rgba(74,222,128,0.25);
-            transition: all 0.18s;
-            opacity: 0.4;
-            pointer-events: none;
-        }
-        .start-cta.active {
-            opacity: 1;
-            pointer-events: all;
-            box-shadow: 0 4px 32px rgba(74,222,128,0.35);
-        }
-        .start-cta:active { transform: scale(0.97); }
-
-        /* ──────────────── FINISH SCREEN ──────────────── */
         .finish-screen {
             display: none;
             position: fixed; inset: 0;
@@ -443,7 +277,6 @@
         }
         .finish-screen.visible { display: flex; }
 
-        /* Animated ring */
         .finish-ring {
             width: 120px; height: 120px;
             position: relative;
@@ -540,302 +373,12 @@
         }
         .btn-restart:active { transform: scale(0.97); }
 
-        /* ──────────────── COMPLETION SPLASH ──────────────── */
-        .completion-splash {
-            display: none;
-            position: fixed; inset: 0;
-            background: var(--bg);
-            z-index: 110;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 32px 24px;
-        }
-        .completion-splash.visible { display: flex; }
-
-        @keyframes splashEmoji {
-            0%   { transform: scale(0.3) rotate(-15deg); opacity: 0; }
-            60%  { transform: scale(1.15) rotate(5deg);  opacity: 1; }
-            100% { transform: scale(1) rotate(0deg);     opacity: 1; }
-        }
-        @keyframes splashTitle {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes splashFadeOut {
-            from { opacity: 1; }
-            to   { opacity: 0; }
-        }
-        .splash-emoji {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            display: block;
-            animation: splashEmoji 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
-        }
-        .splash-cat-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 900;
-            color: var(--text);
-            margin-bottom: 8px;
-            animation: splashTitle 0.5s ease 0.3s both;
-        }
-        .splash-done {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            animation: splashTitle 0.5s ease 0.5s both;
-        }
-        .splash-progress-bar {
-            width: 200px;
-            height: 3px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            margin-top: 32px;
-            overflow: hidden;
-            animation: splashTitle 0.5s ease 0.6s both;
-        }
-        .splash-progress-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--primary);
-            border-radius: 4px;
-            transition: width 1.8s linear;
-            box-shadow: 0 0 8px rgba(74,222,128,0.5);
-        }
-        .completion-splash.fade-out {
-            animation: splashFadeOut 0.5s ease forwards;
-        }
-
-        /* ──────────────── SESSION STATS SCREEN ──────────────── */
-        .session-stats {
-            display: none;
-            position: fixed; inset: 0;
-            background: var(--bg);
-            z-index: 110;
-            flex-direction: column;
-            align-items: center;
-            padding: 24px 20px 32px;
-            overflow-y: auto;
-        }
-        .session-stats.visible { display: flex; }
-
-        @keyframes statsIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .session-stats.visible > * {
-            animation: statsIn 0.4s cubic-bezier(0.4,0,0.2,1) both;
-        }
-
-        .ss-header {
-            width: 100%; max-width: 400px;
-            display: flex; align-items: center; gap: 12px;
-            margin-bottom: 20px;
-        }
-        .ss-cat-icon { font-size: 2rem; }
-        .ss-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem; font-weight: 900;
-            color: var(--text);
-        }
-        .ss-subtitle { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
-
-        .ss-score-row {
-            display: flex; gap: 12px;
-            width: 100%; max-width: 400px;
-            margin-bottom: 20px;
-        }
-        .ss-score-box {
-            flex: 1;
-            border-radius: 20px;
-            padding: 18px 12px;
-            text-align: center;
-            border: 1px solid;
-        }
-        .ss-score-box.knew {
-            background: rgba(74,222,128,0.06);
-            border-color: rgba(74,222,128,0.2);
-        }
-        .ss-score-box.didnt {
-            background: rgba(239,68,68,0.06);
-            border-color: rgba(239,68,68,0.2);
-        }
-        .ss-score-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem; font-weight: 900;
-            line-height: 1;
-        }
-        .ss-score-box.knew .ss-score-num { color: var(--primary); }
-        .ss-score-box.didnt .ss-score-num { color: #f87171; }
-        .ss-score-label {
-            font-size: 0.68rem; font-weight: 600;
-            color: var(--text-dim); letter-spacing: 0.5px;
-            text-transform: uppercase; margin-top: 6px;
-        }
-
-        /* donut chart */
-        .ss-donut-wrap {
-            position: relative; width: 100px; height: 100px;
-            margin: 0 auto 20px;
-        }
-        .ss-donut-wrap svg { width: 100px; height: 100px; transform: rotate(-90deg); }
-        .ss-donut-center {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-        }
-        .ss-donut-pct {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem; font-weight: 900; color: var(--text);
-        }
-        .ss-donut-sub { font-size: 0.55rem; color: var(--text-dim); letter-spacing: 0.5px; }
-
-        /* wrong list */
-        .ss-section-title {
-            font-size: 0.68rem; font-weight: 700;
-            color: var(--text-dim); letter-spacing: 1.5px;
-            text-transform: uppercase;
-            align-self: flex-start;
-            width: 100%; max-width: 400px;
-            margin-bottom: 8px; margin-top: 4px;
-        }
-        .ss-wrong-list {
-            width: 100%; max-width: 400px;
-            display: flex; flex-direction: column; gap: 6px;
-            margin-bottom: 20px;
-        }
-        .ss-wrong-item {
-            background: rgba(239,68,68,0.05);
-            border: 1px solid rgba(239,68,68,0.15);
-            border-radius: 12px;
-            padding: 10px 14px;
-            font-size: 0.85rem; font-weight: 600;
-            color: var(--text);
-            display: flex; align-items: center; gap: 8px;
-        }
-        .ss-wrong-item::before { content: '✗'; color: #f87171; font-size: 0.75rem; }
-
-        .ss-all-correct {
-            background: rgba(74,222,128,0.06);
-            border: 1px solid rgba(74,222,128,0.2);
-            border-radius: 14px;
-            padding: 14px;
-            font-size: 0.85rem; font-weight: 600;
-            color: var(--primary);
-            text-align: center;
-            width: 100%; max-width: 400px;
-            margin-bottom: 20px;
-        }
-
-        .ss-btn-row {
-            display: flex; gap: 10px;
-            width: 100%; max-width: 400px;
-        }
-        .ss-btn {
-            flex: 1; padding: 16px 10px;
-            border: none; border-radius: 18px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.9rem; font-weight: 600;
-            cursor: pointer; letter-spacing: 0.3px;
-            transition: all 0.18s;
-        }
-        .ss-btn:active { transform: scale(0.97); }
-        .ss-btn-primary {
-            background: linear-gradient(135deg, var(--primary2), var(--primary));
-            color: #071a0f;
-            box-shadow: 0 4px 24px rgba(74,222,128,0.25);
-        }
-        .ss-btn-secondary {
-            background: transparent;
-            color: var(--text-mid);
-            border: 1.5px solid var(--border);
-        }
         @keyframes cardIn {
             from { opacity: 0; transform: translateY(18px) scale(0.97); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyframes slideOutLeft {
-            from { opacity: 1; transform: translateX(0) rotate(0deg); }
-            to   { opacity: 0; transform: translateX(-110%) rotate(-8deg); }
-        }
-        @keyframes slideOutRight {
-            from { opacity: 1; transform: translateX(0) rotate(0deg); }
-            to   { opacity: 0; transform: translateX(110%) rotate(8deg); }
-        }
-        @keyframes slideInFromRight {
-            from { opacity: 0; transform: translateX(60px) scale(0.96); }
-            to   { opacity: 1; transform: translateX(0) scale(1); }
-        }
-        .card-wrap.anim-in    { animation: slideInFromRight 0.38s cubic-bezier(0.4,0,0.2,1) both; }
-        .card-wrap.anim-out-left  { animation: slideOutLeft  0.3s cubic-bezier(0.4,0,0.2,1) both; }
-        .card-wrap.anim-out-right { animation: slideOutRight 0.3s cubic-bezier(0.4,0,0.2,1) both; }
+        .card-wrap { animation: cardIn 0.4s cubic-bezier(0.4,0,0.2,1) both; }
 
-        /* ── Know / Don't know buttons ── */
-        .btn-know {
-            background: rgba(74,222,128,0.12);
-            color: var(--primary);
-            border: 1.5px solid rgba(74,222,128,0.35);
-        }
-        .btn-know:active { background: rgba(74,222,128,0.25); }
-        .btn-dontknow {
-            background: rgba(239,68,68,0.1);
-            color: #f87171;
-            border: 1.5px solid rgba(239,68,68,0.3);
-        }
-        .btn-dontknow:active { background: rgba(239,68,68,0.2); }
-
-        /* ── Back arrow ── */
-        .back-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            width: 36px; height: 36px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.18s;
-            flex-shrink: 0;
-        }
-        .back-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.08); }
-
-        /* ── Repeat badge on start screen ── */
-        .repeat-btn {
-            width: 100%;
-            max-width: 400px;
-            background: rgba(239,68,68,0.07);
-            border: 1.5px solid rgba(239,68,68,0.25);
-            border-radius: 18px;
-            padding: 16px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
-            margin-bottom: 12px;
-        }
-        .repeat-btn:active { transform: scale(0.97); }
-        .repeat-btn.selected {
-            border-color: #f87171;
-            background: rgba(239,68,68,0.12);
-            box-shadow: 0 0 20px rgba(239,68,68,0.1);
-        }
-        .repeat-btn .cat-emoji { font-size: 1.5rem; }
-        .repeat-btn-info { flex: 1; }
-        .repeat-btn-name { font-size: 0.95rem; font-weight: 600; color: var(--text); text-align: left; }
-        .repeat-btn-sub  { font-size: 0.75rem; color: var(--text-dim); text-align: left; }
-        .repeat-btn .cat-check { position: static; margin-left: auto; flex-shrink: 0; }
-        .repeat-btn.selected .cat-check {
-            background: #f87171;
-            border-color: #f87171;
-            color: #fff;
-        }
-        .repeat-btn.selected .cat-check::after { content: '✓'; font-weight: 900; }
-
-        /* ──────────────── CONFETTI CANVAS ──────────────── */
         #confetti-canvas {
             position: fixed; inset: 0;
             pointer-events: none;
@@ -845,59 +388,21 @@
 </head>
 <body>
 
-<!-- Start screen -->
-<div class="start-screen" id="start-screen">
-    <div class="start-logo">Atlas Plemen</div>
-    <div class="start-sub">Vyber kategorie pro studium</div>
-
-    <div class="start-section-label" id="repeat-section-label" style="display:none;">Opakování</div>
-    <div class="repeat-btn" id="repeat-btn" onclick="toggleRepeat()" style="display:none;">
-        <div class="cat-emoji">📚</div>
-        <div class="repeat-btn-info">
-            <div class="repeat-btn-name">Opakování – neznámá</div>
-            <div class="repeat-btn-sub" id="repeat-count">0 karet</div>
-        </div>
-        <div class="cat-check" id="repeat-check"></div>
-    </div>
-
-    <div class="start-section-label">Jednotlivé kategorie</div>
-    <div class="cat-grid" id="cat-grid">
-        <!-- generated by JS -->
-    </div>
-
-    <div class="start-section-label">Nebo všechno najednou</div>
-    <div class="all-btn" id="all-btn" onclick="toggleAll()">
-        <div class="cat-emoji">🌍</div>
-        <div class="all-btn-info">
-            <div class="all-btn-name">Všechna plemena</div>
-            <div class="all-btn-sub" id="all-count">44 karet · mix všech kategorií</div>
-        </div>
-        <div class="cat-check" id="all-check"></div>
-    </div>
-
-    <button class="start-cta" id="start-cta" onclick="startQuiz()">Spustit →</button>
-</div>
-
-<!-- Confetti -->
 <canvas id="confetti-canvas"></canvas>
 
-<!-- Header -->
 <div class="header">
-    <div class="back-btn" id="back-btn" onclick="goBackToStart()" title="Zpět na výběr kategorií">←</div>
     <div class="logo">Atlas <span>Plemen</span></div>
     <div class="progress-pill" id="progress-pill">— / —</div>
 </div>
 
-<!-- Progress bar -->
 <div class="progress-track">
     <div class="progress-fill" id="progress-fill" style="width:0%"></div>
 </div>
 
-<!-- Card -->
-<div class="card-wrap" id="card-wrap">
+<div class="card-wrap">
     <div class="card">
         <div class="img-wrap">
-            <div class="badge" id="badge">🐄 Skot</div>
+            <div class="badge" id="badge">Načítám...</div>
             <img id="animal-image" class="animal-img loading" src="" alt="">
         </div>
         <div class="card-body">
@@ -905,76 +410,15 @@
                 <div class="answer-hidden" id="dots-wrap"></div>
                 <div class="answer-text" id="answer-text"></div>
             </div>
-            <div class="btn-row" id="btn-row-reveal">
+            <div class="btn-row">
                 <button id="reveal-btn" class="btn btn-reveal" onclick="reveal()">👁 Odhalit</button>
+                <button id="next-btn" class="btn btn-next" onclick="nextQuestion()">Další ➔</button>
             </div>
-            <div class="btn-row" id="btn-row-answer" style="display:none;">
-                <button class="btn btn-dontknow" onclick="answerCard(false)">✗ Neuměl jsem</button>
-                <button class="btn btn-know"     onclick="answerCard(true)">✓ Uměl jsem</button>
-            </div>
-            <div class="swipe-hint" id="swipe-hint">Swipe vlevo pro další kartu</div>
+            <div class="swipe-hint">Swipe vlevo pro další kartu</div>
         </div>
     </div>
 </div>
 
-<!-- Completion splash -->
-<div class="completion-splash" id="completion-splash">
-    <span class="splash-emoji" id="splash-emoji">🐄</span>
-    <div class="splash-cat-name" id="splash-cat-name">Skot</div>
-    <div class="splash-done">✓ Dokončeno!</div>
-    <div class="splash-progress-bar">
-        <div class="splash-progress-fill" id="splash-fill"></div>
-    </div>
-</div>
-
-<!-- Session stats -->
-<div class="session-stats" id="session-stats">
-    <div class="ss-header">
-        <div class="ss-cat-icon" id="ss-cat-icon">🐄</div>
-        <div>
-            <div class="ss-title" id="ss-cat-title">Výsledky</div>
-            <div class="ss-subtitle" id="ss-cat-subtitle">Dokončeno</div>
-        </div>
-    </div>
-
-    <div class="ss-donut-wrap">
-        <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"/>
-            <circle cx="50" cy="50" r="40" fill="none" stroke="var(--primary)" stroke-width="12"
-                stroke-linecap="round"
-                stroke-dasharray="251"
-                stroke-dashoffset="251"
-                id="ss-donut-arc"
-                style="transition: stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.2s;"/>
-        </svg>
-        <div class="ss-donut-center">
-            <div class="ss-donut-pct" id="ss-pct">0%</div>
-            <div class="ss-donut-sub">UMĚL</div>
-        </div>
-    </div>
-
-    <div class="ss-score-row">
-        <div class="ss-score-box knew">
-            <div class="ss-score-num" id="ss-knew">0</div>
-            <div class="ss-score-label">✓ Uměl jsem</div>
-        </div>
-        <div class="ss-score-box didnt">
-            <div class="ss-score-num" id="ss-didnt">0</div>
-            <div class="ss-score-label">✗ Neuměl jsem</div>
-        </div>
-    </div>
-
-    <div class="ss-section-title" id="ss-wrong-title" style="display:none;">Neznámá plemena</div>
-    <div class="ss-wrong-list" id="ss-wrong-list"></div>
-    <div class="ss-all-correct" id="ss-all-correct" style="display:none;">🎉 Perfektní výsledek! Vše správně.</div>
-
-    <div class="ss-btn-row">
-        <button class="ss-btn ss-btn-secondary" onclick="goBackToStart()">← Kategorie</button>
-        <button class="ss-btn ss-btn-primary" onclick="replayQuiz()">🔄 Znovu</button>
-    </div>
-</div>
-
-<!-- Finish screen -->
 <div class="finish-screen" id="finish-screen">
     <div class="finish-ring">
         <svg viewBox="0 0 120 120">
@@ -984,10 +428,10 @@
         <div class="icon">🏆</div>
     </div>
     <div class="finish-title">Výborně!<br>Dokončeno.</div>
-    <div class="finish-sub">Prošel jsi všechna plemena<br>v tomto balíčku.</div>
+    <div class="finish-sub">Prošel jsi všechna zvířata<br>v tomto balíčku.</div>
     <div class="finish-stats">
         <div class="stat-box">
-            <div class="stat-num" id="stat-total">44</div>
+            <div class="stat-num" id="stat-total">109</div>
             <div class="stat-label">Karet</div>
         </div>
         <div class="stat-box">
@@ -999,7 +443,6 @@
 </div>
 
 <script>
-// ─── DATA (109 zvířat) ──────────────────────────────────────────────────────────
 const seznamSouboru = [
     // 🐄 SKOT
     { file: "Aberdeen Angus.jpg", cat: "🐄", catName: "Skot" },
@@ -1022,7 +465,7 @@ const seznamSouboru = [
     { file: "Pietrain.jpg", cat: "🐷", catName: "Prasata" },
     { file: "Přeštické černostrakaté.jpg", cat: "🐷", catName: "Prasata" },
 
-    // 🐴 KONĚ A LICHOKOPYTNÍCI
+    // 🐴 KONĚ
     { file: "Arabský plnokrevník.jpg", cat: "🐴", catName: "Koně" },
     { file: "Českomoravský belgický kůň.jpg", cat: "🐴", catName: "Koně" },
     { file: "Hafling.webp", cat: "🐴", catName: "Koně" },
@@ -1061,7 +504,7 @@ const seznamSouboru = [
     { file: "Moravský bílý hnědooký.jpg", cat: "🐇", catName: "Králíci" },
     { file: "Moravský modrý.jpg", cat: "🐇", catName: "Králíci" },
 
-    // 🐕 PSI (FCI je vyřešeno dynamicky v kódu)
+    // 🐕 PSI
     { file: "Afghánský chrt (FCI 10).jpg", cat: "🐕", catName: "Psi" },
     { file: "Akita inu (FCI 5).jpeg", cat: "🐕", catName: "Psi" },
     { file: "Belgický ovčák Malinois (FCI 1).jpg", cat: "🐕", catName: "Psi" },
@@ -1134,11 +577,9 @@ let currentIndex = 0;
 let rounds = 1;
 let revealed = false;
 
-// touch/swipe
 let touchStartX = 0;
 let touchStartY = 0;
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
 function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -1152,14 +593,12 @@ function prepareData() {
         let jmeno = item.file.substring(0, item.file.lastIndexOf('.'));
         let badgeText = `${item.cat} ${item.catName}`;
 
-        // MAGIE PRO FCI: Najde v názvu cokoliv jako "(FCI 1)"
         const fciMatch = jmeno.match(/\s*\((FCI\s*\d+)\)/i);
         if (fciMatch) {
-            badgeText = `🐕 ${fciMatch[1]}`; // Přepíše štítek na "🐕 FCI 1"
-            jmeno = jmeno.replace(fciMatch[0], ''); // Smaže "(FCI 1)" z tajenky
+            badgeText = `🐕 ${fciMatch[1]}`;
+            jmeno = jmeno.replace(fciMatch[0], '');
         }
 
-        // Oprava pro "Mula,Mezek"
         jmeno = jmeno.replace(',', ' / ');
 
         return {
@@ -1171,21 +610,17 @@ function prepareData() {
     shuffle(quizData);
 }
 
-// ─── RENDER CARD ─────────────────────────────────────────────────────────────
 function updateCard() {
     const animal = quizData[currentIndex];
     const imgEl = document.getElementById('animal-image');
 
-    // progress
     const total = quizData.length;
     const done = currentIndex;
     document.getElementById('progress-pill').textContent = `${currentIndex + 1} / ${total}`;
     document.getElementById('progress-fill').style.width = `${(done / total) * 100}%`;
 
-    // badge (dynamický štítek)
     document.getElementById('badge').textContent = animal.badge;
 
-    // image fade
     imgEl.classList.add('loading');
     const newSrc = animal.img;
     const tmp = new Image();
@@ -1193,11 +628,9 @@ function updateCard() {
     tmp.onerror = () => { imgEl.src = newSrc; imgEl.classList.remove('loading'); };
     tmp.src = newSrc;
 
-    // answer
     document.getElementById('answer-text').style.display = 'none';
     document.getElementById('answer-text').textContent = animal.name;
 
-    // dots (tečky pro tajenku)
     const dotsWrap = document.getElementById('dots-wrap');
     dotsWrap.style.display = 'flex';
     dotsWrap.innerHTML = '';
@@ -1208,13 +641,11 @@ function updateCard() {
         dotsWrap.appendChild(d);
     }
 
-    // buttons
     document.getElementById('reveal-btn').style.display = 'flex';
     document.getElementById('next-btn').style.display = 'none';
     revealed = false;
 }
 
-// ─── REVEAL ──────────────────────────────────────────────────────────────────
 function reveal() {
     if (revealed) return;
     revealed = true;
@@ -1229,7 +660,6 @@ function reveal() {
     if (navigator.vibrate) navigator.vibrate(40);
 }
 
-// ─── NEXT ─────────────────────────────────────────────────────────────────────
 function nextQuestion() {
     currentIndex++;
     if (currentIndex >= quizData.length) {
@@ -1239,7 +669,6 @@ function nextQuestion() {
     updateCard();
 }
 
-// ─── FINISH ──────────────────────────────────────────────────────────────────
 function showFinish() {
     document.getElementById('stat-total').textContent = quizData.length;
     document.getElementById('stat-rounds').textContent = rounds;
@@ -1247,7 +676,6 @@ function showFinish() {
     const fs = document.getElementById('finish-screen');
     fs.classList.add('visible');
 
-    // Animate ring to 100%
     setTimeout(() => {
         document.getElementById('ring-fill').style.strokeDashoffset = '0';
     }, 100);
@@ -1267,7 +695,6 @@ function restart() {
     updateCard();
 }
 
-// ─── SWIPE ───────────────────────────────────────────────────────────────────
 document.addEventListener('touchstart', e => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
@@ -1284,7 +711,6 @@ document.addEventListener('touchend', e => {
     }
 }, { passive: true });
 
-// ─── CONFETTI ────────────────────────────────────────────────────────────────
 function launchConfetti() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
@@ -1332,484 +758,8 @@ function launchConfetti() {
     draw();
 }
 
-// ─── START ───────────────────────────────────────────────────────────────────
 prepareData();
 updateCard();
-</script>
-let quizData = [];
-let currentIndex = 0;
-let rounds = 1;
-let revealed = false;
-let isRepeatMode = false;
-
-// session stats tracking
-let sessionKnew = 0;
-let sessionDidnt = 0;
-let sessionWrongNames = [];
-
-// touch/swipe
-let touchStartX = 0;
-let touchStartY = 0;
-
-// ─── WRONG ANSWERS (localStorage) ────────────────────────────────────────────
-function getWrongSet() {
-    return new Set(JSON.parse(localStorage.getItem('atlas_wrong') || '[]'));
-}
-function saveWrongSet(set) {
-    localStorage.setItem('atlas_wrong', JSON.stringify([...set]));
-}
-function addWrong(name) {
-    const s = getWrongSet(); s.add(name); saveWrongSet(s);
-}
-function removeWrong(name) {
-    const s = getWrongSet(); s.delete(name); saveWrongSet(s);
-}
-
-// ─── INIT ────────────────────────────────────────────────────────────────────
-function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-}
-
-function getName(file) {
-    return file.substring(0, file.lastIndexOf('.'));
-}
-
-// ─── CARD ANIMATION ──────────────────────────────────────────────────────────
-function animateCardOut(direction, cb) {
-    const wrap = document.getElementById('card-wrap');
-    wrap.classList.add(direction === 'left' ? 'anim-out-left' : 'anim-out-right');
-    setTimeout(() => {
-        wrap.classList.remove('anim-out-left', 'anim-out-right');
-        cb();
-        wrap.classList.add('anim-in');
-        setTimeout(() => wrap.classList.remove('anim-in'), 400);
-    }, 280);
-}
-
-// ─── RENDER CARD ─────────────────────────────────────────────────────────────
-function updateCard() {
-    const animal = quizData[currentIndex];
-    const imgEl = document.getElementById('animal-image');
-
-    // progress
-    const total = quizData.length;
-    document.getElementById('progress-pill').textContent = `${currentIndex + 1} / ${total}`;
-    document.getElementById('progress-fill').style.width = `${(currentIndex / total) * 100}%`;
-
-    // badge
-    document.getElementById('badge').textContent = `${animal.cat} ${animal.catName}`;
-
-    // image fade
-    imgEl.classList.add('loading');
-    const tmp = new Image();
-    tmp.onload = () => { imgEl.src = animal.img; imgEl.classList.remove('loading'); };
-    tmp.onerror = () => { imgEl.src = animal.img; imgEl.classList.remove('loading'); };
-    tmp.src = animal.img;
-
-    // answer
-    document.getElementById('answer-text').style.display = 'none';
-    document.getElementById('answer-text').textContent = animal.name;
-
-    // dots
-    const dotsWrap = document.getElementById('dots-wrap');
-    dotsWrap.style.display = 'flex';
-    dotsWrap.innerHTML = '';
-    const dotCount = Math.min(animal.name.replace(/ /g,'').length, 14);
-    for (let i = 0; i < dotCount; i++) {
-        const d = document.createElement('div');
-        d.className = 'dot';
-        dotsWrap.appendChild(d);
-    }
-
-    // buttons
-    document.getElementById('btn-row-reveal').style.display = 'flex';
-    document.getElementById('btn-row-answer').style.display = 'none';
-    document.getElementById('swipe-hint').textContent = 'Swipe vlevo pro odhalení';
-    revealed = false;
-}
-
-// ─── REVEAL ──────────────────────────────────────────────────────────────────
-function reveal() {
-    if (revealed) return;
-    revealed = true;
-
-    document.getElementById('dots-wrap').style.display = 'none';
-    document.getElementById('answer-text').style.display = 'flex';
-    document.getElementById('btn-row-reveal').style.display = 'none';
-    document.getElementById('btn-row-answer').style.display = 'flex';
-    document.getElementById('swipe-hint').textContent = '✓ Uměl jsem  ·  ✗ Neuměl jsem';
-
-    if (navigator.vibrate) navigator.vibrate(40);
-}
-
-// ─── ANSWER (know / don't know) ───────────────────────────────────────────────
-function answerCard(knew) {
-    if (!revealed) return;
-    const animal = quizData[currentIndex];
-
-    if (knew) {
-        sessionKnew++;
-        removeWrong(animal.name);
-        animateCardOut('right', () => advance());
-    } else {
-        sessionDidnt++;
-        sessionWrongNames.push(animal.name);
-        addWrong(animal.name);
-        animateCardOut('left', () => advance());
-    }
-    if (navigator.vibrate) navigator.vibrate(knew ? [30] : [40, 20, 40]);
-}
-
-function advance() {
-    currentIndex++;
-    if (currentIndex >= quizData.length) {
-        showFinish();
-        return;
-    }
-    updateCard();
-}
-
-// ─── BACK TO START ────────────────────────────────────────────────────────────
-function goBackToStart() {
-    document.getElementById('session-stats').classList.remove('visible');
-    document.getElementById('start-screen').classList.remove('hidden');
-    updateRepeatBtn();
-}
-
-// ─── FINISH ──────────────────────────────────────────────────────────────────
-function showFinish() {
-    const cats = [...new Set(quizData.map(q => q.catName))];
-    let catLabel, catEmoji;
-
-    if (isRepeatMode) {
-        catLabel = 'Opakování';
-        catEmoji = '📚';
-    } else if (cats.length === 1) {
-        catLabel = cats[0];
-        catEmoji = quizData.find(q => q.catName === cats[0])?.cat || '🌍';
-    } else {
-        catLabel = 'Mix';
-        catEmoji = '🌍';
-    }
-
-    showCompletionSplash(catEmoji, catLabel, () => showSessionStats(catEmoji, catLabel));
-}
-
-function showCompletionSplash(emoji, label, onDone) {
-    const splash = document.getElementById('completion-splash');
-    document.getElementById('splash-emoji').textContent = emoji;
-    document.getElementById('splash-cat-name').textContent = label;
-    splash.classList.add('visible');
-
-    // Start progress bar after a tick
-    setTimeout(() => {
-        document.getElementById('splash-fill').style.width = '100%';
-    }, 50);
-
-    // Fade out and transition after 2.2s
-    setTimeout(() => {
-        splash.classList.add('fade-out');
-        setTimeout(() => {
-            splash.classList.remove('visible', 'fade-out');
-            onDone();
-        }, 500);
-    }, 2200);
-
-    launchConfetti();
-    if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
-}
-
-function showSessionStats(catEmoji, catLabel) {
-    const total = sessionKnew + sessionDidnt;
-    const pct = total > 0 ? Math.round((sessionKnew / total) * 100) : 0;
-
-    document.getElementById('ss-cat-icon').textContent = catEmoji;
-    document.getElementById('ss-cat-title').textContent = catLabel;
-    document.getElementById('ss-cat-subtitle').textContent = `${total} karet · ${new Date().toLocaleTimeString('cs', {hour:'2-digit', minute:'2-digit'})}`;
-    document.getElementById('ss-knew').textContent = sessionKnew;
-    document.getElementById('ss-didnt').textContent = sessionDidnt;
-    document.getElementById('ss-pct').textContent = pct + '%';
-
-    // Donut arc (circumference = 251)
-    const offset = 251 - (251 * pct / 100);
-    setTimeout(() => {
-        document.getElementById('ss-donut-arc').style.strokeDashoffset = offset;
-        // Color based on score
-        const arc = document.getElementById('ss-donut-arc');
-        if (pct >= 80) arc.style.stroke = 'var(--primary)';
-        else if (pct >= 50) arc.style.stroke = 'var(--gold)';
-        else arc.style.stroke = '#f87171';
-    }, 100);
-
-    // Wrong list
-    const wrongList = document.getElementById('ss-wrong-list');
-    const wrongTitle = document.getElementById('ss-wrong-title');
-    const allCorrect = document.getElementById('ss-all-correct');
-    wrongList.innerHTML = '';
-
-    if (sessionWrongNames.length === 0) {
-        allCorrect.style.display = 'block';
-        wrongTitle.style.display = 'none';
-    } else {
-        allCorrect.style.display = 'none';
-        wrongTitle.style.display = 'block';
-        sessionWrongNames.forEach(name => {
-            const item = document.createElement('div');
-            item.className = 'ss-wrong-item';
-            item.textContent = name;
-            wrongList.appendChild(item);
-        });
-    }
-
-    document.getElementById('session-stats').classList.add('visible');
-}
-
-// ─── START SCREEN ────────────────────────────────────────────────────────────
-const categories = [
-    { key: 'Skot',    emoji: '🐄', label: 'Skot' },
-    { key: 'Prasata', emoji: '🐷', label: 'Prasata' },
-    { key: 'Koně',    emoji: '🐴', label: 'Koně' },
-    { key: 'Ovce',    emoji: '🐑', label: 'Ovce' },
-    { key: 'Kozy',    emoji: '🐐', label: 'Kozy' },
-    { key: 'Králíci', emoji: '🐰', label: 'Králíci' },
-    { key: 'Drůbež',  emoji: '🦆', label: 'Drůbež' },
-];
-
-let selectedCats = new Set();
-let allSelected  = false;
-let repeatSelected = false;
-
-function updateRepeatBtn() {
-    const wrong = getWrongSet();
-    const label = document.getElementById('repeat-section-label');
-    const btn   = document.getElementById('repeat-btn');
-    const countEl = document.getElementById('repeat-count');
-    if (wrong.size > 0) {
-        label.style.display = 'block';
-        btn.style.display   = 'flex';
-        countEl.textContent = `${wrong.size} karet k procvičení`;
-    } else {
-        label.style.display = 'none';
-        btn.style.display   = 'none';
-        repeatSelected = false;
-        btn.classList.remove('selected');
-    }
-}
-
-function toggleRepeat() {
-    repeatSelected = !repeatSelected;
-    document.getElementById('repeat-btn').classList.toggle('selected', repeatSelected);
-    if (repeatSelected) {
-        // deselect everything else
-        selectedCats.clear();
-        allSelected = false;
-        categories.forEach(c => document.getElementById('cat-' + c.key).classList.remove('selected'));
-        document.getElementById('all-btn').classList.remove('selected');
-    }
-    updateCta();
-}
-
-function buildCatGrid() {
-    const grid = document.getElementById('cat-grid');
-    grid.innerHTML = '';
-    categories.forEach(cat => {
-        const count = seznamSouboru.filter(s => s.catName === cat.key).length;
-        const btn = document.createElement('div');
-        btn.className = 'cat-btn';
-        btn.id = 'cat-' + cat.key;
-        btn.innerHTML = `
-            <div class="cat-emoji">${cat.emoji}</div>
-            <div class="cat-btn-info">
-                <div class="cat-btn-name">${cat.label}</div>
-                <div class="cat-btn-count">${count} plemen</div>
-            </div>
-            <div class="cat-check"></div>
-        `;
-        btn.onclick = () => toggleCat(cat.key);
-        grid.appendChild(btn);
-    });
-
-    const total = seznamSouboru.length;
-    document.getElementById('all-count').textContent = `${total} karet · mix všech kategorií`;
-    updateRepeatBtn();
-}
-
-function toggleCat(key) {
-    if (allSelected) { allSelected = false; document.getElementById('all-btn').classList.remove('selected'); }
-    if (repeatSelected) { repeatSelected = false; document.getElementById('repeat-btn').classList.remove('selected'); }
-    if (selectedCats.has(key)) {
-        selectedCats.delete(key);
-        document.getElementById('cat-' + key).classList.remove('selected');
-    } else {
-        selectedCats.add(key);
-        document.getElementById('cat-' + key).classList.add('selected');
-    }
-    updateCta();
-}
-
-function toggleAll() {
-    if (repeatSelected) { repeatSelected = false; document.getElementById('repeat-btn').classList.remove('selected'); }
-    selectedCats.clear();
-    categories.forEach(c => document.getElementById('cat-' + c.key).classList.remove('selected'));
-    allSelected = !allSelected;
-    document.getElementById('all-btn').classList.toggle('selected', allSelected);
-    updateCta();
-}
-
-function updateCta() {
-    const btn = document.getElementById('start-cta');
-    const hasSelection = allSelected || selectedCats.size > 0 || repeatSelected;
-    btn.classList.toggle('active', hasSelection);
-    if (hasSelection) {
-        let count;
-        if (repeatSelected) count = getWrongSet().size;
-        else if (allSelected) count = seznamSouboru.length;
-        else count = seznamSouboru.filter(s => selectedCats.has(s.catName)).length;
-        btn.textContent = `Spustit ${count} karet →`;
-    } else {
-        btn.textContent = 'Spustit →';
-    }
-}
-
-function startQuiz() {
-    let filtered;
-    if (repeatSelected) {
-        const wrong = getWrongSet();
-        filtered = seznamSouboru.filter(s => wrong.has(getName(s.file)));
-        isRepeatMode = true;
-    } else {
-        if (allSelected) filtered = [...seznamSouboru];
-        else filtered = seznamSouboru.filter(s => selectedCats.has(s.catName));
-        isRepeatMode = false;
-    }
-
-    quizData = filtered.map(item => ({
-        name: getName(item.file),
-        img: item.file,
-        cat: item.cat,
-        catName: item.catName
-    }));
-    shuffle(quizData);
-    currentIndex = 0;
-    rounds = 1;
-    sessionKnew = 0;
-    sessionDidnt = 0;
-    sessionWrongNames = [];
-
-    document.getElementById('start-screen').classList.add('hidden');
-
-    // Animate card in on start
-    const wrap = document.getElementById('card-wrap');
-    wrap.classList.add('anim-in');
-    setTimeout(() => wrap.classList.remove('anim-in'), 400);
-
-    updateCard();
-}
-
-function replayQuiz() {
-    document.getElementById('session-stats').classList.remove('visible');
-
-    // Rebuild same data from original source
-    let filtered;
-    if (isRepeatMode) {
-        const wrong = getWrongSet();
-        filtered = seznamSouboru.filter(s => wrong.has(getName(s.file)));
-    } else if (allSelected) {
-        filtered = [...seznamSouboru];
-    } else {
-        filtered = seznamSouboru.filter(s => selectedCats.has(s.catName));
-    }
-
-    quizData = filtered.map(item => ({
-        name: getName(item.file),
-        img: item.file,
-        cat: item.cat,
-        catName: item.catName
-    }));
-    shuffle(quizData);
-    currentIndex = 0;
-    rounds++;
-    sessionKnew = 0;
-    sessionDidnt = 0;
-    sessionWrongNames = [];
-
-    const wrap = document.getElementById('card-wrap');
-    wrap.classList.add('anim-in');
-    setTimeout(() => wrap.classList.remove('anim-in'), 400);
-    updateCard();
-}
-// ─── START ───────────────────────────────────────────────────────────────────
-buildCatGrid();
-
-document.addEventListener('touchstart', e => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-document.addEventListener('touchend', e => {
-    if (document.getElementById('start-screen') && !document.getElementById('start-screen').classList.contains('hidden')) return;
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-        if (!revealed) { reveal(); return; }
-        if (dx < 0) answerCard(true);   // swipe left = uměl jsem
-        if (dx > 0) answerCard(false);  // swipe right = neuměl jsem
-    }
-}, { passive: true });
-
-// ─── CONFETTI ────────────────────────────────────────────────────────────────
-function launchConfetti() {
-    const canvas = document.getElementById('confetti-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const colors = ['#4ade80','#22c55e','#f5c842','#f8fafc','#86efac','#fbbf24'];
-    const pieces = Array.from({ length: 80 }, () => ({
-        x: Math.random() * canvas.width,
-        y: -10 - Math.random() * 100,
-        r: 4 + Math.random() * 6,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 3,
-        vy: 2 + Math.random() * 3,
-        spin: (Math.random() - 0.5) * 0.2,
-        angle: Math.random() * Math.PI * 2,
-        shape: Math.random() > 0.5 ? 'rect' : 'circle',
-    }));
-
-    let frame = 0;
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        pieces.forEach(p => {
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate(p.angle);
-            ctx.fillStyle = p.color;
-            if (p.shape === 'rect') {
-                ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
-            } else {
-                ctx.beginPath();
-                ctx.arc(0, 0, p.r, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            ctx.restore();
-            p.x += p.vx;
-            p.y += p.vy;
-            p.angle += p.spin;
-            p.vy += 0.05;
-        });
-        frame++;
-        if (frame < 180) requestAnimationFrame(draw);
-        else ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    draw();
-}
-
-
 </script>
 </body>
 </html>
