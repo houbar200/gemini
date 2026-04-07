@@ -26,372 +26,180 @@
             --text-dim:  #64748b;
             --text-mid:  #94a3b8;
             --radius:    28px;
+            --danger:    #ef4444;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            -webkit-user-select: none;
-            user-select: none;
+            background: var(--bg); color: var(--text);
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            overflow: hidden; -webkit-user-select: none; user-select: none;
             padding: 16px;
         }
 
         body::before {
-            content: '';
-            position: fixed; inset: 0;
-            background-image:
-                linear-gradient(rgba(74,222,128,0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(74,222,128,0.025) 1px, transparent 1px);
-            background-size: 48px 48px;
-            pointer-events: none;
-            z-index: 0;
+            content: ''; position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(74,222,128,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.025) 1px, transparent 1px);
+            background-size: 48px 48px; pointer-events: none; z-index: 0;
         }
 
         body::after {
-            content: '';
-            position: fixed;
-            top: -20vh; left: 50%;
-            transform: translateX(-50%);
-            width: 600px; height: 600px;
+            content: ''; position: fixed; top: -20vh; left: 50%;
+            transform: translateX(-50%); width: 600px; height: 600px;
             background: radial-gradient(circle, rgba(74,222,128,0.07) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; z-index: 0;
         }
 
+        /* ──────────────── START SCREEN ──────────────── */
+        .start-screen {
+            position: fixed; inset: 0; background: var(--bg);
+            z-index: 200; display: flex; flex-direction: column;
+            align-items: center; padding: 40px 20px; overflow-y: auto;
+        }
+        .start-title {
+            font-family: 'Playfair Display', serif; font-size: 2.8rem;
+            color: var(--primary); margin-bottom: 5px; font-weight: 900;
+        }
+        .start-sub { color: var(--text-mid); margin-bottom: 30px; font-size: 0.95rem; text-align: center; }
+        
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 440px; }
+        .cat-btn {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 18px 12px; border-radius: 18px; color: var(--text);
+            font-weight: 600; font-size: 1rem; cursor: pointer;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .cat-btn:active { transform: scale(0.96); }
+        .cat-btn.all { grid-column: span 2; background: linear-gradient(135deg, var(--primary2), var(--primary)); color: #071a0f; border: none; box-shadow: 0 4px 20px rgba(74,222,128,0.2); }
+        .cat-btn.review { grid-column: span 2; background: rgba(239, 68, 68, 0.1); border-color: var(--danger); color: var(--danger); margin-top: 10px; }
+        .cat-btn.review[disabled] { opacity: 0.5; pointer-events: none; border-color: var(--border); color: var(--text-dim); background: transparent; }
+
+        /* ──────────────── APP HEADER ──────────────── */
         .header {
-            width: 100%; max-width: 440px;
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 14px;
-            position: relative; z-index: 1;
+            width: 100%; max-width: 440px; display: flex; align-items: center;
+            justify-content: space-between; margin-bottom: 14px; position: relative; z-index: 1;
         }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.05rem;
-            color: var(--text-mid);
-            letter-spacing: 0.5px;
-        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--text-mid); letter-spacing: 0.5px; cursor: pointer; }
         .logo span { color: var(--primary); }
-
         .progress-pill {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            padding: 6px 14px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: var(--text-mid);
-            letter-spacing: 0.5px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 100px; padding: 6px 14px; font-size: 0.78rem;
+            font-weight: 600; color: var(--text-mid); letter-spacing: 0.5px;
         }
 
+        /* ──────────────── PROGRESS BAR ──────────────── */
         .progress-track {
-            width: 100%; max-width: 440px;
-            height: 3px;
-            background: var(--surface);
-            border-radius: 4px;
-            margin-bottom: 14px;
-            overflow: hidden;
-            position: relative; z-index: 1;
+            width: 100%; max-width: 440px; height: 3px; background: var(--surface);
+            border-radius: 4px; margin-bottom: 14px; overflow: hidden; position: relative; z-index: 1;
         }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary2), var(--primary));
-            border-radius: 4px;
-            transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 0 8px rgba(74,222,128,0.5);
-        }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary2), var(--primary)); border-radius: 4px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 8px rgba(74,222,128,0.5); }
 
-        .card-wrap {
-            width: 100%; max-width: 440px;
-            position: relative; z-index: 1;
-            perspective: 1000px;
-        }
-
+        /* ──────────────── CARD ──────────────── */
+        .card-wrap { width: 100%; max-width: 440px; position: relative; z-index: 1; perspective: 1000px; }
         .card {
-            background: var(--card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            box-shadow:
-                0 0 0 1px rgba(74,222,128,0.04),
-                0 32px 64px -16px rgba(0,0,0,0.8),
-                inset 0 1px 0 rgba(255,255,255,0.05);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+            box-shadow: 0 0 0 1px rgba(74,222,128,0.04), 0 32px 64px -16px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+            overflow: hidden; display: flex; flex-direction: column;
         }
 
-        .img-wrap {
-            position: relative;
-            width: 100%;
-            height: 270px;
-            overflow: hidden;
-            background: var(--surface);
-        }
-
-        .animal-img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            transition: opacity 0.35s ease, transform 0.35s ease;
-            display: block;
-        }
+        .img-wrap { position: relative; width: 100%; height: 270px; overflow: hidden; background: var(--surface); }
+        .animal-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.35s ease, transform 0.35s ease; display: block; }
         .animal-img.loading { opacity: 0; transform: scale(1.03); }
-
-        .img-wrap::after {
-            content: '';
-            position: absolute; inset: 0;
-            background: linear-gradient(to bottom, transparent 55%, var(--card) 100%);
-            pointer-events: none;
-        }
+        .img-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 55%, var(--card) 100%); pointer-events: none; }
 
         .badge {
-            position: absolute;
-            top: 14px; left: 14px;
-            background: rgba(8,13,20,0.75);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            padding: 5px 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-mid);
-            letter-spacing: 0.5px;
-            z-index: 2;
-            display: flex; align-items: center; gap: 5px;
+            position: absolute; top: 14px; left: 14px; background: rgba(8,13,20,0.75);
+            backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 100px;
+            padding: 5px 12px; font-size: 0.75rem; font-weight: 600; color: var(--text-mid);
+            letter-spacing: 0.5px; z-index: 2; display: flex; align-items: center; gap: 5px;
         }
 
-        .card-body {
-            padding: 16px 20px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .answer-wrap {
-            min-height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .answer-hidden {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .dot {
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            background: var(--border);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
+        .card-body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
+        .answer-wrap { min-height: 64px; display: flex; align-items: center; justify-content: center; }
+        .answer-hidden { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); border: 1px solid rgba(255,255,255,0.1); }
         .answer-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-align: center;
-            line-height: 1.2;
-            animation: fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) both;
-            display: none;
+            font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--primary);
+            text-align: center; line-height: 1.2; animation: fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) both; display: none;
         }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
+        /* ──────────────── BUTTONS ──────────────── */
         .btn-row { display: flex; gap: 10px; }
-
         .btn {
-            flex: 1; padding: 16px 10px;
-            border: none; border-radius: 18px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem; font-weight: 600;
-            cursor: pointer;
-            transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
-            letter-spacing: 0.3px;
-            position: relative; overflow: hidden;
+            flex: 1; padding: 16px 10px; border: none; border-radius: 18px; font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+            letter-spacing: 0.3px; position: relative; overflow: hidden;
         }
-
-        .btn::after {
-            content: '';
-            position: absolute; inset: 0;
-            background: rgba(255,255,255,0);
-            transition: background 0.15s;
-        }
+        .btn::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0); transition: background 0.15s; }
         .btn:active::after { background: rgba(255,255,255,0.08); }
         .btn:active { transform: scale(0.97); }
 
-        .btn-reveal {
-            background: transparent;
-            color: var(--primary);
-            border: 1.5px solid rgba(74,222,128,0.35);
-            box-shadow: inset 0 0 20px rgba(74,222,128,0.04);
-        }
-        .btn-reveal:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(74,222,128,0.15), inset 0 0 20px rgba(74,222,128,0.06);
-        }
+        .btn-reveal { background: transparent; color: var(--primary); border: 1.5px solid rgba(74,222,128,0.35); box-shadow: inset 0 0 20px rgba(74,222,128,0.04); }
+        .btn-reveal:hover { border-color: var(--primary); box-shadow: 0 0 20px rgba(74,222,128,0.15), inset 0 0 20px rgba(74,222,128,0.06); }
+        
+        .btn-yes { background: linear-gradient(135deg, var(--primary2), var(--primary)); color: #071a0f; box-shadow: 0 4px 24px rgba(74,222,128,0.25); }
+        .btn-no { background: transparent; border: 1.5px solid var(--danger); color: var(--danger); }
 
-        .btn-next {
-            background: linear-gradient(135deg, var(--primary2), var(--primary));
-            color: #071a0f;
-            box-shadow: 0 4px 24px rgba(74,222,128,0.25);
-            display: none;
-        }
-        .btn-next:hover {
-            box-shadow: 0 4px 32px rgba(74,222,128,0.4);
-        }
+        .swipe-hint { text-align: center; font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.5px; margin-top: 2px; opacity: 0.7; }
 
-        .swipe-hint {
-            text-align: center;
-            font-size: 0.72rem;
-            color: var(--text-dim);
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-            opacity: 0.7;
-        }
-
+        /* ──────────────── FINISH SCREEN ──────────────── */
         .finish-screen {
-            display: none;
-            position: fixed; inset: 0;
-            background: var(--bg);
-            z-index: 100;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 32px 24px;
-            text-align: center;
+            display: none; position: fixed; inset: 0; background: var(--bg); z-index: 100;
+            flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; text-align: center;
         }
         .finish-screen.visible { display: flex; }
-
-        .finish-ring {
-            width: 120px; height: 120px;
-            position: relative;
-            margin-bottom: 32px;
-        }
-        .finish-ring svg {
-            width: 120px; height: 120px;
-            transform: rotate(-90deg);
-        }
-        .finish-ring circle {
-            fill: none;
-            stroke-width: 4;
-            stroke-linecap: round;
-        }
+        .finish-ring { width: 120px; height: 120px; position: relative; margin-bottom: 32px; }
+        .finish-ring svg { width: 120px; height: 120px; transform: rotate(-90deg); }
+        .finish-ring circle { fill: none; stroke-width: 4; stroke-linecap: round; }
         .ring-bg { stroke: rgba(255,255,255,0.05); }
-        .ring-fill {
-            stroke: var(--primary);
-            stroke-dasharray: 326;
-            stroke-dashoffset: 326;
-            filter: drop-shadow(0 0 6px rgba(74,222,128,0.5));
-            transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.3s;
-        }
-        .finish-ring .icon {
-            position: absolute; inset: 0;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.8rem;
-        }
+        .ring-fill { stroke: var(--primary); stroke-dasharray: 326; stroke-dashoffset: 326; filter: drop-shadow(0 0 6px rgba(74,222,128,0.5)); transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1) 0.3s; }
+        .finish-ring .icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; }
 
-        .finish-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 900;
-            line-height: 1.15;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #fff 40%, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        .finish-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; line-height: 1.15; margin-bottom: 10px; background: linear-gradient(135deg, #fff 40%, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .finish-sub { font-size: 1rem; color: var(--text-mid); margin-bottom: 40px; line-height: 1.5; }
+        .finish-stats { display: flex; gap: 16px; margin-bottom: 40px; width: 100%; max-width: 320px; }
+        .stat-box { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 18px 12px; display: flex; flex-direction: column; gap: 4px; }
+        .stat-num { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: var(--primary); }
+        .stat-num.err { color: var(--danger); }
+        .stat-label { font-size: 0.75rem; color: var(--text-dim); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
 
-        .finish-sub {
-            font-size: 1rem;
-            color: var(--text-mid);
-            margin-bottom: 40px;
-            line-height: 1.5;
-        }
-
-        .finish-stats {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 40px;
-            width: 100%;
-            max-width: 320px;
-        }
-
-        .stat-box {
-            flex: 1;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 18px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .stat-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--primary);
-        }
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .btn-restart {
-            width: 100%; max-width: 320px;
-            padding: 18px;
-            background: linear-gradient(135deg, var(--primary2), var(--primary));
-            border: none;
-            border-radius: 20px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #071a0f;
-            cursor: pointer;
-            letter-spacing: 0.3px;
-            box-shadow: 0 4px 32px rgba(74,222,128,0.3);
-            transition: all 0.18s;
-        }
-        .btn-restart:active { transform: scale(0.97); }
-
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(18px) scale(0.97); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .card-wrap { animation: cardIn 0.4s cubic-bezier(0.4,0,0.2,1) both; }
-
-        #confetti-canvas {
-            position: fixed; inset: 0;
-            pointer-events: none;
-            z-index: 99;
-        }
+        @keyframes cardIn { from { opacity: 0; transform: translateY(18px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .card-wrap.anim { animation: cardIn 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+        #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 99; }
     </style>
 </head>
 <body>
 
 <canvas id="confetti-canvas"></canvas>
 
+<div id="start-screen" class="start-screen">
+    <div class="start-title">Atlas Plemen</div>
+    <div class="start-sub">Vyber si kategorii a swipej ke zkoušce!</div>
+    
+    <div class="cat-grid">
+        <button class="cat-btn all" onclick="startGame('Vše')">🌍 Všechna zvířata (109)</button>
+        <button class="cat-btn" onclick="startGame('Skot')">🐄 Skot</button>
+        <button class="cat-btn" onclick="startGame('Prasata')">🐷 Prasata</button>
+        <button class="cat-btn" onclick="startGame('Koně')">🐴 Koně</button>
+        <button class="cat-btn" onclick="startGame('Ovce')">🐑 Ovce</button>
+        <button class="cat-btn" onclick="startGame('Kozy')">🐐 Kozy</button>
+        <button class="cat-btn" onclick="startGame('Drůbež')">🐔 Drůbež</button>
+        <button class="cat-btn" onclick="startGame('Králíci')">🐇 Králíci</button>
+        <button class="cat-btn" onclick="startGame('Psi')">🐕 Psi</button>
+        <button class="cat-btn" onclick="startGame('Exotika')">🌴 Exotika</button>
+        
+        <button id="review-btn" class="cat-btn review" onclick="startGame('Opakování')" disabled>
+            🔄 Opakování chyb (<span id="mistakes-badge">0</span>)
+        </button>
+    </div>
+</div>
+
 <div class="header">
-    <div class="logo">Atlas <span>Plemen</span></div>
+    <div class="logo" onclick="goToStart()">Atlas <span>Plemen</span></div>
     <div class="progress-pill" id="progress-pill">— / —</div>
 </div>
 
@@ -399,7 +207,7 @@
     <div class="progress-fill" id="progress-fill" style="width:0%"></div>
 </div>
 
-<div class="card-wrap">
+<div class="card-wrap" id="card-wrap">
     <div class="card">
         <div class="img-wrap">
             <div class="badge" id="badge">Načítám...</div>
@@ -410,11 +218,16 @@
                 <div class="answer-hidden" id="dots-wrap"></div>
                 <div class="answer-text" id="answer-text"></div>
             </div>
-            <div class="btn-row">
-                <button id="reveal-btn" class="btn btn-reveal" onclick="reveal()">👁 Odhalit</button>
-                <button id="next-btn" class="btn btn-next" onclick="nextQuestion()">Další ➔</button>
+            
+            <div class="btn-row" id="row-reveal">
+                <button class="btn btn-reveal" onclick="reveal()">👁 Odhalit</button>
             </div>
-            <div class="swipe-hint">Swipe vlevo pro další kartu</div>
+            <div class="btn-row" id="row-action" style="display: none;">
+                <button class="btn btn-no" onclick="nextQuestion(false)">❌ Nevím</button>
+                <button class="btn btn-yes" onclick="nextQuestion(true)">✅ Vím</button>
+            </div>
+
+            <div class="swipe-hint" id="swipe-hint">Swipe vlevo pro odhalení</div>
         </div>
     </div>
 </div>
@@ -427,158 +240,114 @@
         </svg>
         <div class="icon">🏆</div>
     </div>
-    <div class="finish-title">Výborně!<br>Dokončeno.</div>
-    <div class="finish-sub">Prošel jsi všechna zvířata<br>v tomto balíčku.</div>
+    <div class="finish-title">Kolo dokončeno!</div>
+    <div class="finish-sub">Tady je tvůj výsledek z této kategorie.</div>
     <div class="finish-stats">
         <div class="stat-box">
-            <div class="stat-num" id="stat-total">109</div>
-            <div class="stat-label">Karet</div>
+            <div class="stat-num" id="stat-total">0</div>
+            <div class="stat-label">Správně</div>
         </div>
         <div class="stat-box">
-            <div class="stat-num" id="stat-rounds">1</div>
-            <div class="stat-label">Kolo</div>
+            <div class="stat-num err" id="stat-err">0</div>
+            <div class="stat-label">Nevím</div>
         </div>
     </div>
-    <button class="btn-restart" onclick="restart()">🔄 Zamíchat znovu</button>
+    <div class="btn-row" style="width: 100%; max-width: 320px;">
+        <button class="btn btn-reveal" onclick="goToStart()">🏠 Menu</button>
+        <button class="btn btn-yes" onclick="startGame('Opakování')" id="finish-review-btn">🔄 Opakovat chyby</button>
+    </div>
 </div>
 
 <script>
+// ─── DATA (109 zvířat) ──────────────────────────────────────────────────────────
 const seznamSouboru = [
-    // 🐄 SKOT
-    { file: "Aberdeen Angus.jpg", cat: "🐄", catName: "Skot" },
-    { file: "Belgické Modré.jpg", cat: "🐄", catName: "Skot" },
-    { file: "Česká Červinka.png", cat: "🐄", catName: "Skot" },
-    { file: "Český Strakatý Skot.jpg", cat: "🐄", catName: "Skot" },
-    { file: "Galloway.jpg", cat: "🐄", catName: "Skot" },
-    { file: "Gasconne.png", cat: "🐄", catName: "Skot" },
-    { file: "Highland.jpg", cat: "🐄", catName: "Skot" },
-    { file: "Holštýn.jpg", cat: "🐄", catName: "Skot" },
-    { file: "Jersey.jpg", cat: "🐄", catName: "Skot" },
-    { file: "Piemontese.jpg", cat: "🐄", catName: "Skot" },
-
-    // 🐷 PRASATA
-    { file: "České bílé ušlechtilé.jpg", cat: "🐷", catName: "Prasata" },
-    { file: "Duroc.jpg", cat: "🐷", catName: "Prasata" },
-    { file: "Hampshire.jpg", cat: "🐷", catName: "Prasata" },
-    { file: "Landrace.jpg", cat: "🐷", catName: "Prasata" },
-    { file: "Mangalica.jpg", cat: "🐷", catName: "Prasata" },
-    { file: "Pietrain.jpg", cat: "🐷", catName: "Prasata" },
+    { file: "Aberdeen Angus.jpg", cat: "🐄", catName: "Skot" }, { file: "Belgické Modré.jpg", cat: "🐄", catName: "Skot" },
+    { file: "Česká Červinka.png", cat: "🐄", catName: "Skot" }, { file: "Český Strakatý Skot.jpg", cat: "🐄", catName: "Skot" },
+    { file: "Galloway.jpg", cat: "🐄", catName: "Skot" }, { file: "Gasconne.png", cat: "🐄", catName: "Skot" },
+    { file: "Highland.jpg", cat: "🐄", catName: "Skot" }, { file: "Holštýn.jpg", cat: "🐄", catName: "Skot" },
+    { file: "Jersey.jpg", cat: "🐄", catName: "Skot" }, { file: "Piemontese.jpg", cat: "🐄", catName: "Skot" },
+    { file: "České bílé ušlechtilé.jpg", cat: "🐷", catName: "Prasata" }, { file: "Duroc.jpg", cat: "🐷", catName: "Prasata" },
+    { file: "Hampshire.jpg", cat: "🐷", catName: "Prasata" }, { file: "Landrace.jpg", cat: "🐷", catName: "Prasata" },
+    { file: "Mangalica.jpg", cat: "🐷", catName: "Prasata" }, { file: "Pietrain.jpg", cat: "🐷", catName: "Prasata" },
     { file: "Přeštické černostrakaté.jpg", cat: "🐷", catName: "Prasata" },
-
-    // 🐴 KONĚ
-    { file: "Arabský plnokrevník.jpg", cat: "🐴", catName: "Koně" },
-    { file: "Českomoravský belgický kůň.jpg", cat: "🐴", catName: "Koně" },
-    { file: "Hafling.webp", cat: "🐴", catName: "Koně" },
-    { file: "Hucul.jpg", cat: "🐴", catName: "Koně" },
-    { file: "Kůň Andaluský.jpg", cat: "🐴", catName: "Koně" },
-    { file: "Kůň starokladrubský.jpg", cat: "🐴", catName: "Koně" },
-    { file: "Lipicán.webp", cat: "🐴", catName: "Koně" },
-    { file: "Mula,Mezek.jpg", cat: "🐴", catName: "Koně" },
-    { file: "Percheron.webp", cat: "🐴", catName: "Koně" },
-    { file: "Shetlandský pony.webp", cat: "🐴", catName: "Koně" },
+    { file: "Arabský plnokrevník.jpg", cat: "🐴", catName: "Koně" }, { file: "Českomoravský belgický kůň.jpg", cat: "🐴", catName: "Koně" },
+    { file: "Hafling.webp", cat: "🐴", catName: "Koně" }, { file: "Hucul.jpg", cat: "🐴", catName: "Koně" },
+    { file: "Kůň Andaluský.jpg", cat: "🐴", catName: "Koně" }, { file: "Kůň starokladrubský.jpg", cat: "🐴", catName: "Koně" },
+    { file: "Lipicán.webp", cat: "🐴", catName: "Koně" }, { file: "Mula,Mezek.jpg", cat: "🐴", catName: "Koně" },
+    { file: "Percheron.webp", cat: "🐴", catName: "Koně" }, { file: "Shetlandský pony.webp", cat: "🐴", catName: "Koně" },
     { file: "Slezský norik.jpg", cat: "🐴", catName: "Koně" },
-
-    // 🐑 OVCE
-    { file: "Awassi.JPG", cat: "🐑", catName: "Ovce" },
-    { file: "Merinolandschaf.jpg", cat: "🐑", catName: "Ovce" },
-    { file: "Ovce Jákobova.jpg", cat: "🐑", catName: "Ovce" },
-    { file: "Ovce Romanovská.webp", cat: "🐑", catName: "Ovce" },
-    { file: "Oxford Down.jpg", cat: "🐑", catName: "Ovce" },
-    { file: "Suffolk.jpg", cat: "🐑", catName: "Ovce" },
-    { file: "Texel.jpg", cat: "🐑", catName: "Ovce" },
-    { file: "Valaška.jpg", cat: "🐑", catName: "Ovce" },
-
-    // 🐐 KOZY
-    { file: "Koza anglonúbijská.jpg", cat: "🐐", catName: "Kozy" },
-    { file: "Koza Bílá Krátkosrtá.webp", cat: "🐐", catName: "Kozy" },
-    { file: "Koza hnědá krátkosrstá.webp", cat: "🐐", catName: "Kozy" },
-    { file: "Koza kašmírová.jpg", cat: "🐐", catName: "Kozy" },
-
-    // 🐓 DRŮBEŽ
-    { file: "Brahmánka.jpg", cat: "🐔", catName: "Drůbež" },
-    { file: "Hedvábnička.jpg", cat: "🐔", catName: "Drůbež" },
+    { file: "Awassi.JPG", cat: "🐑", catName: "Ovce" }, { file: "Merinolandschaf.jpg", cat: "🐑", catName: "Ovce" },
+    { file: "Ovce Jákobova.jpg", cat: "🐑", catName: "Ovce" }, { file: "Ovce Romanovská.webp", cat: "🐑", catName: "Ovce" },
+    { file: "Oxford Down.jpg", cat: "🐑", catName: "Ovce" }, { file: "Suffolk.jpg", cat: "🐑", catName: "Ovce" },
+    { file: "Texel.jpg", cat: "🐑", catName: "Ovce" }, { file: "Valaška.jpg", cat: "🐑", catName: "Ovce" },
+    { file: "Koza anglonúbijská.jpg", cat: "🐐", catName: "Kozy" }, { file: "Koza Bílá Krátkosrtá.webp", cat: "🐐", catName: "Kozy" },
+    { file: "Koza hnědá krátkosrstá.webp", cat: "🐐", catName: "Kozy" }, { file: "Koza kašmírová.jpg", cat: "🐐", catName: "Kozy" },
+    { file: "Brahmánka.jpg", cat: "🐔", catName: "Drůbež" }, { file: "Hedvábnička.jpg", cat: "🐔", catName: "Drůbež" },
     { file: "Indický běžec.jpg", cat: "🦆", catName: "Drůbež" },
-
-    // 🐇 KRÁLÍCI
-    { file: "Český strakáč.jpg", cat: "🐇", catName: "Králíci" },
-    { file: "Moravský bílý hnědooký.jpg", cat: "🐇", catName: "Králíci" },
+    { file: "Český strakáč.jpg", cat: "🐇", catName: "Králíci" }, { file: "Moravský bílý hnědooký.jpg", cat: "🐇", catName: "Králíci" },
     { file: "Moravský modrý.jpg", cat: "🐇", catName: "Králíci" },
-
-    // 🐕 PSI
-    { file: "Afghánský chrt (FCI 10).jpg", cat: "🐕", catName: "Psi" },
-    { file: "Akita inu (FCI 5).jpeg", cat: "🐕", catName: "Psi" },
-    { file: "Belgický ovčák Malinois (FCI 1).jpg", cat: "🐕", catName: "Psi" },
-    { file: "Bígl (FCI 6).jpg", cat: "🐕", catName: "Psi" },
-    { file: "Irský setr (FCI 7).jpg", cat: "🐕", catName: "Psi" },
-    { file: "Jack Russell teriér (FCI 3).jpeg", cat: "🐕", catName: "Psi" },
-    { file: "Jezevčík hladkosrstý (FCI 4).jpg", cat: "🐕", catName: "Psi" },
-    { file: "Knírač velký (FCI 2).jpg", cat: "🐕", catName: "Psi" },
-    { file: "Labradorský retrívr (FCI 8).jpg", cat: "🐕", catName: "Psi" },
-    { file: "Papillon (FCI 9).jpg", cat: "🐕", catName: "Psi" },
-
-    // 🌴 EXOTIKA
-    { file: "Antilopa losí.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Antilopa vraná.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Ara ararauna.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Bongo lesní.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Ďábel medvědovitý.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Daněk evropský.jpeg", cat: "🌴", catName: "Exotika" },
-    { file: "Emu hnědý.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Fenek.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Gekončík noční.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Gepard štíhlý.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Hrabáč kapský.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Hrošík liberijský.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Hyena skvrnitá.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Jaguár americký.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Jelen sika.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Kajmanka supí.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Kasuár přílbový.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Kobra indická.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Korálovka sedlatá.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Krajta královská.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Lama alpaka.jpg", cat: "🐪", catName: "Exotika" },
-    { file: "Lama krotká.jpg", cat: "🐪", catName: "Exotika" },
-    { file: "Lev africký.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Lev indický.jpeg", cat: "🌴", catName: "Exotika" },
-    { file: "Liška obecná.jpeg", cat: "🌴", catName: "Exotika" },
-    { file: "Los evropský.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Luskoun velký.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Mandril.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Medvěd hnědý.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Medvěd lední.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Nestor kea.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Outloň váhavý.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Panda červená.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Panda velká.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Pelikán bílý.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Pes hyenovitý.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Plameňák růžový.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Pštros africký.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Rypouš sloní.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Sklípkan Smithův.jpg", cat: "🕷️", catName: "Exotika" },
-    { file: "Slon africký.jpeg", cat: "🐘", catName: "Exotika" },
-    { file: "Slon indický.jpg", cat: "🐘", catName: "Exotika" },
-    { file: "Sob polární.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Tapír jihoamerický.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Tučňák královský.jpg", cat: "🐧", catName: "Exotika" },
-    { file: "Tygr indický.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Varan komodský.jpg", cat: "🦎", catName: "Exotika" },
-    { file: "Velbloud dvouhrbý.jpg", cat: "🐪", catName: "Exotika" },
-    { file: "Velbloud jednohrbý.jpg", cat: "🐪", catName: "Exotika" },
-    { file: "Vlk obecný.jpg", cat: "🌴", catName: "Exotika" },
-    { file: "Zebra Grévyho.jpg", cat: "🦓", catName: "Exotika" },
-    { file: "Zmije rohatá.jpg", cat: "🐍", catName: "Exotika" },
+    { file: "Afghánský chrt (FCI 10).jpg", cat: "🐕", catName: "Psi" }, { file: "Akita inu (FCI 5).jpeg", cat: "🐕", catName: "Psi" },
+    { file: "Belgický ovčák Malinois (FCI 1).jpg", cat: "🐕", catName: "Psi" }, { file: "Bígl (FCI 6).jpg", cat: "🐕", catName: "Psi" },
+    { file: "Irský setr (FCI 7).jpg", cat: "🐕", catName: "Psi" }, { file: "Jack Russell teriér (FCI 3).jpeg", cat: "🐕", catName: "Psi" },
+    { file: "Jezevčík hladkosrstý (FCI 4).jpg", cat: "🐕", catName: "Psi" }, { file: "Knírač velký (FCI 2).jpg", cat: "🐕", catName: "Psi" },
+    { file: "Labradorský retrívr (FCI 8).jpg", cat: "🐕", catName: "Psi" }, { file: "Papillon (FCI 9).jpg", cat: "🐕", catName: "Psi" },
+    { file: "Antilopa losí.jpg", cat: "🌴", catName: "Exotika" }, { file: "Antilopa vraná.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Ara ararauna.jpg", cat: "🌴", catName: "Exotika" }, { file: "Bongo lesní.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Ďábel medvědovitý.jpg", cat: "🌴", catName: "Exotika" }, { file: "Daněk evropský.jpeg", cat: "🌴", catName: "Exotika" },
+    { file: "Emu hnědý.jpg", cat: "🌴", catName: "Exotika" }, { file: "Fenek.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Gekončík noční.jpg", cat: "🌴", catName: "Exotika" }, { file: "Gepard štíhlý.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Hrabáč kapský.jpg", cat: "🌴", catName: "Exotika" }, { file: "Hrošík liberijský.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Hyena skvrnitá.jpg", cat: "🌴", catName: "Exotika" }, { file: "Jaguár americký.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Jelen sika.jpg", cat: "🌴", catName: "Exotika" }, { file: "Kajmanka supí.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Kasuár přílbový.jpg", cat: "🌴", catName: "Exotika" }, { file: "Kobra indická.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Korálovka sedlatá.jpg", cat: "🌴", catName: "Exotika" }, { file: "Krajta královská.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Lama alpaka.jpg", cat: "🐪", catName: "Exotika" }, { file: "Lama krotká.jpg", cat: "🐪", catName: "Exotika" },
+    { file: "Lev africký.jpg", cat: "🌴", catName: "Exotika" }, { file: "Lev indický.jpeg", cat: "🌴", catName: "Exotika" },
+    { file: "Liška obecná.jpeg", cat: "🌴", catName: "Exotika" }, { file: "Los evropský.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Luskoun velký.jpg", cat: "🌴", catName: "Exotika" }, { file: "Mandril.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Medvěd hnědý.jpg", cat: "🌴", catName: "Exotika" }, { file: "Medvěd lední.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Nestor kea.jpg", cat: "🌴", catName: "Exotika" }, { file: "Outloň váhavý.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Panda červená.jpg", cat: "🌴", catName: "Exotika" }, { file: "Panda velká.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Pelikán bílý.jpg", cat: "🌴", catName: "Exotika" }, { file: "Pes hyenovitý.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Plameňák růžový.jpg", cat: "🌴", catName: "Exotika" }, { file: "Pštros africký.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Rypouš sloní.jpg", cat: "🌴", catName: "Exotika" }, { file: "Sklípkan Smithův.jpg", cat: "🕷️", catName: "Exotika" },
+    { file: "Slon africký.jpeg", cat: "🐘", catName: "Exotika" }, { file: "Slon indický.jpg", cat: "🐘", catName: "Exotika" },
+    { file: "Sob polární.jpg", cat: "🌴", catName: "Exotika" }, { file: "Tapír jihoamerický.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Tučňák královský.jpg", cat: "🐧", catName: "Exotika" }, { file: "Tygr indický.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Varan komodský.jpg", cat: "🦎", catName: "Exotika" }, { file: "Velbloud dvouhrbý.jpg", cat: "🐪", catName: "Exotika" },
+    { file: "Velbloud jednohrbý.jpg", cat: "🐪", catName: "Exotika" }, { file: "Vlk obecný.jpg", cat: "🌴", catName: "Exotika" },
+    { file: "Zebra Grévyho.jpg", cat: "🦓", catName: "Exotika" }, { file: "Zmije rohatá.jpg", cat: "🐍", catName: "Exotika" },
     { file: "Želva sloní.jpg", cat: "🐢", catName: "Exotika" }
 ];
 
-let quizData = [];
+let allData = [];
+let currentDeck = [];
+let mistakes = new Set();
+let roundMistakes = 0;
 let currentIndex = 0;
-let rounds = 1;
 let revealed = false;
 
+// Dotyk pro swipe
 let touchStartX = 0;
 let touchStartY = 0;
+
+// ─── INITIALIZATION ────────────────────────────────────────────────────────
+function initApp() {
+    // Příprava dat s magií pro FCI štítky
+    allData = seznamSouboru.map(item => {
+        let jmeno = item.file.substring(0, item.file.lastIndexOf('.'));
+        let badgeText = `${item.cat} ${item.catName}`;
+
+        const fciMatch = jmeno.match(/\s*\((FCI\s*\d+)\)/i);
+        if (fciMatch) {
+            badgeText = `🐕 ${fciMatch[1]}`;
+            jmeno = jmeno.replace(fciMatch[0], '');
+        }
+        jmeno = jmeno.replace(',', ' / ');
+
+        return { name: jmeno, img: item.file, badge: badgeText, catName: item.catName };
+    });
+}
 
 function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -588,39 +357,57 @@ function shuffle(arr) {
     return arr;
 }
 
-function prepareData() {
-    quizData = seznamSouboru.map(item => {
-        let jmeno = item.file.substring(0, item.file.lastIndexOf('.'));
-        let badgeText = `${item.cat} ${item.catName}`;
+// ─── GAME LOGIC ────────────────────────────────────────────────────────────
+function goToStart() {
+    document.getElementById('finish-screen').classList.remove('visible');
+    document.getElementById('start-screen').style.display = 'flex';
+    document.getElementById('ring-fill').style.strokeDashoffset = '326';
+    
+    // Aktualizace tlačítka opakování
+    const reviewBtn = document.getElementById('review-btn');
+    document.getElementById('mistakes-badge').textContent = mistakes.size;
+    if (mistakes.size > 0) reviewBtn.removeAttribute('disabled');
+    else reviewBtn.setAttribute('disabled', 'true');
+}
 
-        const fciMatch = jmeno.match(/\s*\((FCI\s*\d+)\)/i);
-        if (fciMatch) {
-            badgeText = `🐕 ${fciMatch[1]}`;
-            jmeno = jmeno.replace(fciMatch[0], '');
-        }
-
-        jmeno = jmeno.replace(',', ' / ');
-
-        return {
-            name: jmeno,
-            img: item.file,
-            badge: badgeText
-        };
-    });
-    shuffle(quizData);
+function startGame(category) {
+    if (category === 'Vše') {
+        currentDeck = [...allData];
+    } else if (category === 'Opakování') {
+        if (mistakes.size === 0) return;
+        currentDeck = Array.from(mistakes);
+        mistakes.clear(); // Vyprázdníme, co nezvládne teď, spadne tam znovu
+    } else {
+        currentDeck = allData.filter(a => a.catName === category);
+    }
+    
+    shuffle(currentDeck);
+    currentIndex = 0;
+    roundMistakes = 0;
+    
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('finish-screen').classList.remove('visible');
+    updateCard();
 }
 
 function updateCard() {
-    const animal = quizData[currentIndex];
+    const animal = currentDeck[currentIndex];
     const imgEl = document.getElementById('animal-image');
+    const wrapEl = document.getElementById('card-wrap');
+    
+    // Re-trigger animation
+    wrapEl.classList.remove('anim');
+    void wrapEl.offsetWidth;
+    wrapEl.classList.add('anim');
 
-    const total = quizData.length;
-    const done = currentIndex;
-    document.getElementById('progress-pill').textContent = `${currentIndex + 1} / ${total}`;
-    document.getElementById('progress-fill').style.width = `${(done / total) * 100}%`;
+    // Progress
+    document.getElementById('progress-pill').textContent = `${currentIndex + 1} / ${currentDeck.length}`;
+    document.getElementById('progress-fill').style.width = `${(currentIndex / currentDeck.length) * 100}%`;
 
+    // Data karty
     document.getElementById('badge').textContent = animal.badge;
 
+    // Načítání obrázku
     imgEl.classList.add('loading');
     const newSrc = animal.img;
     const tmp = new Image();
@@ -628,6 +415,7 @@ function updateCard() {
     tmp.onerror = () => { imgEl.src = newSrc; imgEl.classList.remove('loading'); };
     tmp.src = newSrc;
 
+    // Tajenka a tečky
     document.getElementById('answer-text').style.display = 'none';
     document.getElementById('answer-text').textContent = animal.name;
 
@@ -636,13 +424,14 @@ function updateCard() {
     dotsWrap.innerHTML = '';
     const dotCount = Math.min(animal.name.replace(/ /g,'').length, 16);
     for (let i = 0; i < dotCount; i++) {
-        const d = document.createElement('div');
-        d.className = 'dot';
+        const d = document.createElement('div'); d.className = 'dot';
         dotsWrap.appendChild(d);
     }
 
-    document.getElementById('reveal-btn').style.display = 'flex';
-    document.getElementById('next-btn').style.display = 'none';
+    // UI state
+    document.getElementById('row-reveal').style.display = 'flex';
+    document.getElementById('row-action').style.display = 'none';
+    document.getElementById('swipe-hint').textContent = 'Swipe vlevo pro odhalení';
     revealed = false;
 }
 
@@ -651,82 +440,89 @@ function reveal() {
     revealed = true;
 
     document.getElementById('dots-wrap').style.display = 'none';
-    const at = document.getElementById('answer-text');
-    at.style.display = 'flex';
+    document.getElementById('answer-text').style.display = 'flex';
 
-    document.getElementById('reveal-btn').style.display = 'none';
-    document.getElementById('next-btn').style.display = 'flex';
+    document.getElementById('row-reveal').style.display = 'none';
+    document.getElementById('row-action').style.display = 'flex';
+    document.getElementById('swipe-hint').textContent = '⬅️ Nevím | Vím ➡️';
 
     if (navigator.vibrate) navigator.vibrate(40);
 }
 
-function nextQuestion() {
-    currentIndex++;
-    if (currentIndex >= quizData.length) {
-        showFinish();
-        return;
+function nextQuestion(knewIt) {
+    const animal = currentDeck[currentIndex];
+    
+    // Pokud nevěděl, uložíme do chyb
+    if (!knewIt) {
+        mistakes.add(animal);
+        roundMistakes++;
     }
-    updateCard();
+
+    currentIndex++;
+    if (currentIndex >= currentDeck.length) {
+        showFinish();
+    } else {
+        updateCard();
+    }
 }
 
 function showFinish() {
-    document.getElementById('stat-total').textContent = quizData.length;
-    document.getElementById('stat-rounds').textContent = rounds;
+    const correct = currentDeck.length - roundMistakes;
+    document.getElementById('stat-total').textContent = correct;
+    document.getElementById('stat-err').textContent = roundMistakes;
+
+    // Povolení/zakázání tlačítka opakování na konci
+    const revBtn = document.getElementById('finish-review-btn');
+    if (mistakes.size > 0) revBtn.style.display = 'block';
+    else revBtn.style.display = 'none';
 
     const fs = document.getElementById('finish-screen');
     fs.classList.add('visible');
 
     setTimeout(() => {
-        document.getElementById('ring-fill').style.strokeDashoffset = '0';
+        const percent = correct / currentDeck.length;
+        document.getElementById('ring-fill').style.strokeDashoffset = 326 - (326 * percent);
     }, 100);
 
-    launchConfetti();
+    if (correct === currentDeck.length) launchConfetti();
     if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
 }
 
-function restart() {
-    rounds++;
-    currentIndex = 0;
-    shuffle(quizData);
-
-    document.getElementById('finish-screen').classList.remove('visible');
-    document.getElementById('ring-fill').style.strokeDashoffset = '326';
-
-    updateCard();
-}
-
+// ─── SWIPE GESTURES ──────────────────────────────────────────────────────
 document.addEventListener('touchstart', e => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
 document.addEventListener('touchend', e => {
+    // Zabrání swipu pokud je vidět start nebo finish screen
+    if(document.getElementById('start-screen').style.display !== 'none' || 
+       document.getElementById('finish-screen').classList.contains('visible')) return;
+
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
+    
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-        if (dx < 0) {
-            if (revealed) nextQuestion();
-            else reveal();
+        if (!revealed && dx < 0) {
+            reveal(); // Doleva = odhalit
+        } else if (revealed) {
+            if (dx < 0) nextQuestion(false); // Doleva = Nevím
+            if (dx > 0) nextQuestion(true);  // Doprava = Vím
         }
     }
 }, { passive: true });
 
+// ─── CONFETTI ────────────────────────────────────────────────────────────
 function launchConfetti() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
 
     const colors = ['#4ade80','#22c55e','#f5c842','#f8fafc','#86efac','#fbbf24'];
     const pieces = Array.from({ length: 80 }, () => ({
-        x: Math.random() * canvas.width,
-        y: -10 - Math.random() * 100,
-        r: 4 + Math.random() * 6,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 3,
-        vy: 2 + Math.random() * 3,
-        spin: (Math.random() - 0.5) * 0.2,
-        angle: Math.random() * Math.PI * 2,
+        x: Math.random() * canvas.width, y: -10 - Math.random() * 100,
+        r: 4 + Math.random() * 6, color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
+        spin: (Math.random() - 0.5) * 0.2, angle: Math.random() * Math.PI * 2,
         shape: Math.random() > 0.5 ? 'rect' : 'circle',
     }));
 
@@ -734,22 +530,11 @@ function launchConfetti() {
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         pieces.forEach(p => {
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate(p.angle);
-            ctx.fillStyle = p.color;
-            if (p.shape === 'rect') {
-                ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
-            } else {
-                ctx.beginPath();
-                ctx.arc(0, 0, p.r, 0, Math.PI * 2);
-                ctx.fill();
-            }
+            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.angle); ctx.fillStyle = p.color;
+            if (p.shape === 'rect') { ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); } 
+            else { ctx.beginPath(); ctx.arc(0, 0, p.r, 0, Math.PI * 2); ctx.fill(); }
             ctx.restore();
-            p.x += p.vx;
-            p.y += p.vy;
-            p.angle += p.spin;
-            p.vy += 0.05;
+            p.x += p.vx; p.y += p.vy; p.angle += p.spin; p.vy += 0.05;
         });
         frame++;
         if (frame < 180) requestAnimationFrame(draw);
@@ -758,8 +543,9 @@ function launchConfetti() {
     draw();
 }
 
-prepareData();
-updateCard();
+// ─── BOOT ────────────────────────────────────────────────────────────────
+initApp();
+goToStart();
 </script>
 </body>
 </html>
